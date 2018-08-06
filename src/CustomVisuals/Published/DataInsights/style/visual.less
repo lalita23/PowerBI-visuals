@@ -9,8 +9,7 @@
 .mainCont {
     height: ~"calc(100% - 80px)";
     width: ~"calc(100% - 40px)";
-    overflow: auto;
-    font-size: 12px;
+    overflow: auto;   
     float: right;
 }
 .chart > .subDiv1{
@@ -35,9 +34,9 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
     left: 0;
     width: 40px;
     height: 100%;
-    top: 0px;
-    font-size: 12px;
+    top: 0;   
     z-index: 1;
+    background-color:blue;
     background-color: rgba(255,255,255,0);
 }
 
@@ -45,8 +44,7 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
     left: 40px;
     width: ~"calc(100% - 57px)";
     height: 40px;
-    bottom: 0;
-    font-size: 12px;
+    bottom: 0;    
 }
 
 .yAxis {
@@ -57,6 +55,7 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
 }
 
 .yAxisLabel {
+    box-sizing: border-box;
     position: relative;
     border: 1px solid;     
     overflow: hidden;
@@ -65,8 +64,7 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
     width: 500px;
     transform: translateX(-50%) translateY(-50%) rotate(-90deg);
     text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    white-space: nowrap;    
     background-color: #222930;
     color: white;
     display: inline-block;
@@ -77,7 +75,7 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    padding: 0px 7px 0px 10px;
+    padding: 0 7px 0 10px;
     text-align: center;
     margin: 0; 
     display: inline-block;
@@ -89,7 +87,7 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
     white-space: nowrap;
     overflow: hidden;
     display: inline-block;
-    padding: 0px 3px 0px 0px;
+    padding: 0 3px 0 0;
     margin: 0;
 }
 
@@ -107,7 +105,7 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    padding: 0px 7px 0px 10px;
+    padding: 0 7px 0 10px;
     display: inline-block;
     text-align: center;
     margin: auto;
@@ -117,7 +115,7 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    padding: 0px 7px 0px 0px;
+    padding: 0 7px 0 0;
     display: inline-block;
     text-align: center;
     margin: auto;
@@ -134,13 +132,13 @@ p.xAxisLabel:hover, p.yAxisLabel:hover,p.columnSelectorLabel:hover {
 }
 
 /*For table*/
-table.tableCont {
+table .tableCont {
     margin: 10px 0 0 10px;
     padding: 5px;
     float: left;
 }
 
-td.rows {
+td .rows {
     width: 10px;
     white-space: nowrap;
     overflow: hidden;
@@ -157,21 +155,18 @@ td.rows {
 }
 
 .colValueText {
-    margin: 0px;
-    font-size: 10px;
+    margin: 0;    
     width: 42px;
     height: 15px;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    white-space: nowrap;    
 }
 
 .category {
     width: 42px;
-    height: 16px;
-    font-size: 10px;
+    height: 16px;   
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -191,15 +186,16 @@ td.rows {
 }
 
 .borderChart {
+    box-sizing: border-box;
     border: 1px solid #DCDCDC;
     min-height: 150px;
     margin: 5px;
-    width: 325px;
-    float: left;
+    width: 325px;   
     overflow: auto;
 }
 
 .legend1 {
+    box-sizing: border-box;
     height: 20px;
     width: 250px;
     padding-top: 10px;
@@ -215,21 +211,18 @@ td.rows {
 .linesP {
     position: absolute;
     width: 25px;
-    text-align: center;
-    font-size: 10px;
-    float: left;
+    text-align: center;     
     overflow: hidden;
     text-overflow: ellipsis;
     top: 3px;
-    margin: 5px !important;
+    margin: 5px;
 }
 
 .columnChart div {
     position: relative;
     width: 25px;
-    margin: 0px;
-    float: left;
-    padding: 0px; 
+    margin: 0;  
+    padding: 0; 
 }
 
 .columnChart .div0 {
@@ -243,24 +236,24 @@ td.rows {
 }
 
 .maxLegend, .minLegend, .avgLegend, .constantLegend {
-    width: 10px;
-    float: left;
+    width: 10px;  
     height: 10px;
 }
 
 .maxNameLegend, .minNameLegend {
     height: 10px;
-    width: 30px;
-    font-size: 10px;
-    margin-left: 5px;
-    float: left;
+    width: 30px;    
+    margin-left: 5px;   
 }
 
 .avgNameLegend, .constantNameLegend {
     float: left;
     height: 10px;
     width: 50px;
-    margin-left: 5px;
+    margin-left: 5px;   
+}
+
+.colValueText, .category, .linesP, .maxNameLegend, .minNameLegend, .avgNameLegend, .constantNameLegend {
     font-size: 10px;
 }
 
@@ -285,6 +278,7 @@ td.rows {
 }
 
 .categoryText {
+    box-sizing: border-box;
     margin: 0 0 0 2px;
     text-align: left;
     position: absolute;
@@ -313,9 +307,9 @@ td.rows {
 
 /*For Brick Chart*/
 .brickChart {
+    box-sizing: border-box;
     margin: 10px 5px 5px 5px;
-    width: 325px;
-    float: left;
+    width: 325px;   
     overflow: auto;
     border: solid 1px;
     padding-left: 5px;
@@ -341,8 +335,8 @@ td.rows {
     margin: 0;
     position: absolute;
     width: 55px;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     color: #fff;
     white-space: nowrap;
     overflow: hidden;
@@ -366,6 +360,7 @@ ul.topMenu {
 }
 
 .topMenu li {
+    box-sizing: border-box;
     height: 100%;
     float: left;
     padding: 0 5px;
@@ -382,7 +377,7 @@ ul.topMenu {
     width: 100px;
 }
 
-li.isolateCont {
+li .isolateCont {
     width: 50px;
 }
 
@@ -428,9 +423,12 @@ li > p {
 p.label0, p.label1, p.label2, p.label3 {
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
-    font-size: 12px;
+    overflow: hidden;   
     font-weight: bold;
+}
+
+.mainCont, .yAxisCont, .xAxisCont, p.label0, p.label1, p.label2, p.label3 {
+    font-size: 12px;
 }
 
 .presentationCont {
@@ -455,6 +453,7 @@ p.label0, p.label1, p.label2, p.label3 {
 }
 
 .chartTypeMenu {
+    box-sizing: border-box;
     display: inline-block;
     z-index: 2;
     position: absolute;
@@ -469,15 +468,20 @@ p.label0, p.label1, p.label2, p.label3 {
 }
 
 .topCont .imageIcon {
+    box-sizing: border-box;
     background-size: contain;
     width: 40px;
     height: 100%;
     background-repeat: no-repeat;
     float: left;
     margin-right: 10px;
-    padding: 0px 5px;
+    padding: 0 5px;
     background-position: center;
     cursor: pointer;
+}
+
+.borderChart, .linesP, .brickChart, .columnChart div, .maxLegend, .minLegend, .avgLegend, .constantLegend, .maxNameLegend, .minNameLegend {
+    float: left;
 }
 
 .binningCont, .groupingCont, .targetCont, .xAxis, .yAxis, .colorCont, .dynamicBinCont, .columnSelector, .colorByCont {
@@ -507,7 +511,7 @@ th, td {
     width: 12px;
 }
 
-.colorCont.text {
+.colorCont .text {
     cursor: pointer;
 }
 
@@ -531,11 +535,11 @@ p.binColumn:hover, p.groupedColumn:hover, p.targetColumn:hover, p.xAxisColumn:ho
 
 .selectiondiv {
     border: 2px solid white;
-    background: #1B94E0;
-    opacity: 0.4;
+    background: #1B94E0;    
     filter: alpha(opacity=40);
-    margin: 0px;
-    padding: 0px;
+    opacity: 0.4;
+    margin: 0;
+    padding: 0;
     display: none;
 }
 
