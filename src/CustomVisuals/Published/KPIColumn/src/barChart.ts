@@ -793,12 +793,9 @@ module powerbi.extensibility.visual {
                 const horizontal: IHorizontal = this.getHorizontalSettings(this.dataViews);
                 const animation: IAnimation = this.getAnimationSettings(this.dataViews);
                 const backgroundImage: IBackgroundImage = this.getBackgroundImageSettings(this.dataViews);
-                if (viewModel.dataMax === 0) {
-                    return;
-                } else {
-                    let legendHeight: number = 0;
-                    let legendNumber: number = 0;
-                    if (legendSettings.show) {
+                let legendHeight: number = 0;
+                let legendNumber: number = 0;
+                if (legendSettings.show) {
                         if (analytics.min || analytics.max || analytics.avg) {
                             legendNumber = legendNumber + 1;
                         }
@@ -1064,30 +1061,30 @@ module powerbi.extensibility.visual {
                             }
                         }
                     }
-                    const legendInnerPart: JQuery = $('.legendInnerPart');
-                    if (legendInnerPart.length > 0) {
+                const legendInnerPart: JQuery = $('.legendInnerPart');
+                if (legendInnerPart.length > 0) {
                         const dimension: ClientRect = $(legendInnerPart)[legendInnerPart.length - 1].getBoundingClientRect();
                         legendHeight = dimension.height + dimension.top;
                     } else {
                         legendHeight = 0;
                     }
-                    height = height - legendHeight > 0 ? height - legendHeight : 0;
-                    this.svg.attr({
+                height = height - legendHeight > 0 ? height - legendHeight : 0;
+                this.svg.attr({
                         width: width,
                         height: height
                     });
 
                     // tslint:disable-next-line:no-any
-                    let margins: any;
-                    margins = BarChart.config.margins;
-                    height -= margins.bottom;
+                let margins: any;
+                margins = BarChart.config.margins;
+                height -= margins.bottom;
 
-                    let displayVal: number = 0;
-                    if (yAxisConfig.displayUnits === 0) {
+                let displayVal: number = 0;
+                if (yAxisConfig.displayUnits === 0) {
                         const valLen: number = viewModel.dataMax.toString().length;
                         displayVal = this.getAutoDisplayUnits(valLen);
                     }
-                    if (options.dataViews[0].categorical.values[0].source.format &&
+                if (options.dataViews[0].categorical.values[0].source.format &&
                         options.dataViews[0].categorical.values[0].source.format.indexOf('%') !== -1) {
                         this.yAxisFormatter = valueFormatter.create({
                             format: options.dataViews[0].categorical.values[0].source.format,
@@ -1101,67 +1098,67 @@ module powerbi.extensibility.visual {
                             precision: yAxisConfig.decimalPlaces
                         });
                     }
-                    let formattedMaxMeasure: string;
-                    const yAxisStartLength: number = yAxisConfig.start.toString().length;
-                    const yAxisEndLength: number = yAxisConfig.end.toString().length;
-                    const yAxisFormatMaxValue: number = yAxisStartLength > yAxisEndLength ? yAxisConfig.start : yAxisConfig.end;
-                    const dataSetMaxLength: number = viewModel.dataMax.toString().length;
-                    const dataSetMinLength: number = viewModel.dataMin.toString().length;
-                    const dataSetFormatMaxValue: number = dataSetMaxLength > dataSetMinLength ? viewModel.dataMax : viewModel.dataMin;
-                    const maxValue: number = yAxisFormatMaxValue.toString().length > dataSetFormatMaxValue.toString().length
+                let formattedMaxMeasure: string;
+                const yAxisStartLength: number = yAxisConfig.start.toString().length;
+                const yAxisEndLength: number = yAxisConfig.end.toString().length;
+                const yAxisFormatMaxValue: number = yAxisStartLength > yAxisEndLength ? yAxisConfig.start : yAxisConfig.end;
+                const dataSetMaxLength: number = viewModel.dataMax.toString().length;
+                const dataSetMinLength: number = viewModel.dataMin.toString().length;
+                const dataSetFormatMaxValue: number = dataSetMaxLength > dataSetMinLength ? viewModel.dataMax : viewModel.dataMin;
+                const maxValue: number = yAxisFormatMaxValue.toString().length > dataSetFormatMaxValue.toString().length
                         ? yAxisFormatMaxValue : dataSetFormatMaxValue;
-                    formattedMaxMeasure = this.yAxisFormatter.format(parseFloat(maxValue.toString()) * 1.3);
-                    let measureTextProperties: TextProperties;
-                    measureTextProperties = {
+                formattedMaxMeasure = this.yAxisFormatter.format(parseFloat(maxValue.toString()) * 1.3);
+                let measureTextProperties: TextProperties;
+                measureTextProperties = {
                         text: formattedMaxMeasure,
                         fontFamily: fontstyle,
                         fontSize: '12px'
                     };
-                    const yAxisWidth: number = textMeasurementService.measureSvgTextWidth(measureTextProperties);
-                    margins.left = yAxisWidth + 10;
-                    this.yAxis.classed('yAxis', true).style({
+                const yAxisWidth: number = textMeasurementService.measureSvgTextWidth(measureTextProperties);
+                margins.left = yAxisWidth + 10;
+                this.yAxis.classed('yAxis', true).style({
                         fill: yAxisConfig.fontColor
                     });
-                    fytargetChecker = false;
-                    if (viewModel.fytarget) {
+                fytargetChecker = false;
+                if (viewModel.fytarget) {
                         fytargetChecker = true;
                     }
-                    this.xAxis.classed('xAxis', true).style({
+                this.xAxis.classed('xAxis', true).style({
                         fill: xAxisConfig.fontColor
                     });
                     // tslint:disable-next-line:no-any
-                    let xScale: any;
-                    let xAxis: d3.svg.Axis;
-                    let barWidths: number;
+                let xScale: any;
+                let xAxis: d3.svg.Axis;
+                let barWidths: number;
                     // tslint:disable-next-line:no-any
-                    let yScale: any;
+                let yScale: any;
                     // tslint:disable-next-line:no-any
-                    let yAxis: any;
+                let yAxis: any;
                     // tslint:disable-next-line:no-any
-                    let lineDataPoints: any;
-                    let linePoints: string = '';
-                    let ytdLine: d3.Selection<SVGElement>;
-                    let minVisibleBarWidth: number = 19;
-                    const marginForWidth: number = 25;
-                    let barOrigin: number = 0;
-                    const minWidthForHorizontal: number = 800;
-                    const widthForScroll: number = 20;
-                    const minHeightForHorizontal: number = 330;
-                    const minWidthForVertical: number = 40;
-                    const minHeightForVertical: number = 70;
-                    const marginForXAxis: number = 40;
-                    const marginForyAxis: number = 50;
-                    const marginForYAxis: number = 70;
-                    const marginForDataLabel: number = 30;
-                    const parseIntValue: number = 10;
-                    const horizontalEndRange: number = 10;
-                    const textWordBreakWidth: number = 50;
-                    const textTailoredWidth: number = 70;
-                    if (yAxisConfig.start > 0) {
+                let lineDataPoints: any;
+                let linePoints: string = '';
+                let ytdLine: d3.Selection<SVGElement>;
+                let minVisibleBarWidth: number = 19;
+                const marginForWidth: number = 25;
+                let barOrigin: number = 0;
+                const minWidthForHorizontal: number = 800;
+                const widthForScroll: number = 20;
+                const minHeightForHorizontal: number = 330;
+                const minWidthForVertical: number = 40;
+                const minHeightForVertical: number = 70;
+                const marginForXAxis: number = 40;
+                const marginForyAxis: number = 50;
+                const marginForYAxis: number = 70;
+                const marginForDataLabel: number = 30;
+                const parseIntValue: number = 10;
+                const horizontalEndRange: number = 10;
+                const textWordBreakWidth: number = 50;
+                const textTailoredWidth: number = 70;
+                if (yAxisConfig.start > 0) {
                         barOrigin = <number>yAxisConfig.start;
                     }
 
-                    if (horizontal.show) {
+                if (horizontal.show) {
                         // hide overflow initially
                         this.rootDiv.style('overflow-y', 'auto').style('overflow-x', 'hidden');
                         margins.left = 30;
@@ -2394,7 +2391,6 @@ module powerbi.extensibility.visual {
                         let allowInteractions: boolean;
                         allowInteractions = this.host.allowInteractions;
                     }
-                }
             }
             this.barSelection = this.bars;
             this.barforecastedSelection = this.barforecasted;
