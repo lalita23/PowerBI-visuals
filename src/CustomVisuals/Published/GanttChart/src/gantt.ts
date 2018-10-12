@@ -73,7 +73,6 @@ module powerbi.extensibility.visual {
     import textMeasurementService = powerbi.extensibility.utils.formatting.textMeasurementService;
 
     // powerbi.extensibility.utils.interactivity
-    import appendClearCatcher = powerbi.extensibility.utils.interactivity.appendClearCatcher;
     import SelectableDataPoint = powerbi.extensibility.utils.interactivity.SelectableDataPoint;
     import IInteractiveBehavior = powerbi.extensibility.utils.interactivity.IInteractiveBehavior;
     import IInteractivityService = powerbi.extensibility.utils.interactivity.IInteractivityService;
@@ -170,6 +169,19 @@ module powerbi.extensibility.visual {
     const paranthesisStartLiteral: string = '(';
     const paranthesisEndLiteral: string = ')';
     const commaLiteral: string = ',';
+    let ganttBody: Selection<HTMLElement>;
+    let singleCharacter: Selection<HTMLElement>;
+    let toggleIconId: Selection<SVGAElement>;
+    let ganttBottomTaskDiv: JQuery;
+    let ganttLegendPanel: Selection<HTMLElement>;
+    let ganttTaskRect: JQuery;
+    let ganttToggleTask: JQuery;
+    let ganttKPIClass: JQuery;
+    let ganttTaskResouce: JQuery;
+    let ganttKpiPanelJQuery: JQuery;
+    let ganttLegendIndicatorPanel : JQuery;
+    let ganttBarPanel : JQuery;
+    let ganttKPIToggle: Selection<HTMLElement>;
 
     // tslint:disable-next-line:interface-name
     export interface Task extends SelectableDataPoint {
@@ -317,8 +329,6 @@ module powerbi.extensibility.visual {
 
     // tslint:disable-next-line:interface-name
     export interface GanttBehaviorOptions {
-        // tslint:disable-next-line:no-any
-        clearCatcher: Selection<SelectableDataPoint>;
         // tslint:disable-next-line:no-any
         taskSelection: Selection<SelectableDataPoint>;
         // tslint:disable-next-line:no-any
@@ -741,8 +751,6 @@ module powerbi.extensibility.visual {
         private todayGroup: Selection<HTMLElement>;
         private todayindicator: Selection<HTMLElement>;
         private todaytext: Selection<HTMLElement>;
-        // tslint:disable-next-line:no-any
-        private clearCatcher: Selection<any>;
         private static ganttDiv: Selection<HTMLElement>;
         private selectionManager: ISelectionManager;
         private behavior: GanttChartBehavior;
@@ -811,8 +819,6 @@ module powerbi.extensibility.visual {
                 .append('svg')
                 .classed(Selectors.legendSvg.class, true);
 
-            this.clearCatcher = appendClearCatcher(this.legendSvg);
-
             this.legendGroup = this.legendSvg
                 .append('g')
                 .classed(Selectors.legendGroup.class, true);
@@ -867,8 +873,6 @@ module powerbi.extensibility.visual {
                 .append('svg')
                 .classed(Selectors.legendIndicatorTitleSvg.class, true);
 
-            this.clearCatcher = appendClearCatcher(this.legendIndicatorTitleSvg);
-
             this.kpiIndicatorDiv = this.legendIndicatorDiv
                 .append('div')
                 .classed(Selectors.kpiIndicatorPanel.class, true);
@@ -876,8 +880,6 @@ module powerbi.extensibility.visual {
             this.kpiIndicatorSvg = this.kpiIndicatorDiv
                 .append('svg')
                 .classed(Selectors.kpiIndicatorSvg.class, true);
-
-            this.clearCatcher = appendClearCatcher(this.kpiIndicatorSvg);
 
             this.milestoneIndicatorDiv = this.legendIndicatorDiv
                 .append('div')
@@ -887,8 +889,6 @@ module powerbi.extensibility.visual {
                 .append('svg')
                 .classed(Selectors.milestoneIndicatorSvg.class, true);
 
-            this.clearCatcher = appendClearCatcher(this.milestoneIndicatorSvg);
-
             this.phaseIndicatorDiv = this.legendIndicatorDiv
                 .append('div')
                 .classed(Selectors.phaseIndicatorPanel.class, true);
@@ -897,8 +897,6 @@ module powerbi.extensibility.visual {
                 .append('svg')
                 .classed(Selectors.phaseIndicatorSvg.class, true);
 
-            this.clearCatcher = appendClearCatcher(this.phaseIndicatorSvg);
-
             this.timelineDiv = Gantt.ganttDiv
                 .append('div')
                 .classed(Selectors.timeLinePanel.class, true);
@@ -906,8 +904,6 @@ module powerbi.extensibility.visual {
             this.timelineSvg = this.timelineDiv
                 .append('svg')
                 .classed(Selectors.className.class, true);
-
-            this.clearCatcher = appendClearCatcher(this.timelineSvg);
 
             this.axisGroup = this.timelineSvg
                 .append('g')
@@ -919,8 +915,6 @@ module powerbi.extensibility.visual {
 
             this.kpiTitleSvg = this.kpiTitleDiv
                 .append('svg');
-
-            this.clearCatcher = appendClearCatcher(this.kpiTitleSvg);
 
             this.kpiTitleGroup = this.kpiTitleSvg
                 .append('g')
@@ -952,8 +946,6 @@ module powerbi.extensibility.visual {
             this.imageSvg = this.imageDiv
                 .append('svg');
 
-            this.clearCatcher = appendClearCatcher(this.imageSvg);
-
             this.imageSvg.append('image')
                 .attr('id', 'gantt_ToggleIcon')
                 .attr('class', 'collapse')
@@ -967,8 +959,6 @@ module powerbi.extensibility.visual {
 
             this.kpiImageSvg = this.kpiImageDiv
                 .append('svg');
-
-            this.clearCatcher = appendClearCatcher(this.kpiImageSvg);
 
             this.kpiImageSvg.append('image')
                 .attr('id', 'gantt_KPIToggle')
@@ -991,8 +981,6 @@ module powerbi.extensibility.visual {
                 .append('svg')
                 .classed(Selectors.kpiSvg.class, true);
 
-            this.clearCatcher = appendClearCatcher(this.kpiSvg);
-
             this.backgroundGroupKPI = this.kpiSvg
                 .append('g')
                 .classed(Selectors.backgroundBoxSvg.class, true);
@@ -1008,8 +996,6 @@ module powerbi.extensibility.visual {
             this.taskSvg = this.taskDiv
                 .append('svg')
                 .classed(Selectors.taskSvg.class, true);
-
-            this.clearCatcher = appendClearCatcher(this.taskSvg);
 
             this.backgroundGroupTask = this.taskSvg
                 .append('g')
@@ -1055,8 +1041,6 @@ module powerbi.extensibility.visual {
                 .append('svg')
                 .classed(Selectors.bottomMilestoneSvg.class, true);
 
-            this.clearCatcher = appendClearCatcher(this.bottommilestoneSvg);
-
             this.todayGroup = this.bottommilestoneSvg
                 .append('g')
                 .classed(Selectors.todayGroup.class, true);
@@ -1072,8 +1056,6 @@ module powerbi.extensibility.visual {
             this.bottomTaskSvg = this.bottomTaskDiv
                 .append('svg')
                 .classed(Selectors.bottomTaskSvg.class, true);
-
-            this.clearCatcher = appendClearCatcher(this.bottomTaskSvg);
         }
 
         /**
@@ -1101,7 +1083,7 @@ module powerbi.extensibility.visual {
          */
         private updateChartSize(): void {
             if (legendIndex !== -1) {
-                position(d3.select('.gantt-body'), this.barsLegend);
+                position(ganttBody, this.barsLegend);
             }
 
             this.viewport.width = Math.ceil(this.viewport.width);
@@ -1186,6 +1168,9 @@ module powerbi.extensibility.visual {
                     thisObj.setBottomScrollPosition(bottomMilestoneScrollPosition);
                 }
             });
+            // d3.selectAll('.gantt_bottomPanel').on('scroll', function (): void {
+            //     console.log("Vertical Scroll Event");
+            // });
             let categoryWidth: number;
             let categoryWidthSvg: number;
             if (!this.viewModel.settings.taskLabels.isHierarchy) {
@@ -1763,11 +1748,6 @@ module powerbi.extensibility.visual {
                     valuediffer = datamax - datamin;
                     duration = valuediffer;
                 }
-                const defaultColor: Fill = {
-                    solid: {
-                        color: colorPalette.getColor(index.toString()).value
-                    }
-                };
 
                 // tslint:disable-next-line:no-shadowed-variable
                 const categories: DataViewCategoryColumn[] = dataView.categorical.categories;
@@ -1778,7 +1758,26 @@ module powerbi.extensibility.visual {
                         legendIndex = ka;
                     }
                 });
-
+                // tslint:disable-next-line:no-any
+                let legendUniqueValues: any[] = [];
+                // tslint:disable-next-line
+                if (legendIndex !== -1) {
+                    // tslint:disable-next-line
+                    legendUniqueValues = (dataView.categorical.categories[legendIndex].values).filter(function (e, i, arr) {
+                        return arr.lastIndexOf(e) === i;
+                    });
+                }
+                const defaultColor: Fill = {
+                    solid: {
+                        // tslint:disable-next-line:no-use-before-declare
+                        color: legendIndex !== -1 ?
+                        // tslint:disable-next-line:no-use-before-declare
+                        colorPalette.getColor(dataView.categorical.categories[legendIndex].values[index] === null ?
+                            // tslint:disable-next-line:no-use-before-declare
+                            'Null' : dataView.categorical.categories[legendIndex].values[index].toString()).value
+                            : colorPalette.getColor('Null').value
+                    }
+                };
                 // tslint:disable-next-line:no-any
                 let taskColor: any;
                 let cnt: number = 0;
@@ -1866,7 +1865,6 @@ module powerbi.extensibility.visual {
                         }
                     }
                 }
-
                 // tslint:disable-next-line:no-use-before-declare
                 if (legendIndex === -1) {
                     taskColor = this.getCategoricalObjectValue<Fill>(dataView.categorical.categories[0],
@@ -2070,8 +2068,7 @@ module powerbi.extensibility.visual {
             if (legendIndex !== -1) {
                 barsLegend.changeOrientation(LegendPosition.Top);
                 barsLegend.drawLegend(legendData, viewport);
-
-                position(d3.select('.gantt-body'), barsLegend);
+                position(ganttBody, barsLegend);
             }
 
             let levelofSorting: number = Gantt.sortLevel;
@@ -2082,13 +2079,10 @@ module powerbi.extensibility.visual {
                 hashArr = [];
                 const hyphenLiteral: string = '-';
                 for (let index: number = 0; index <= largest; index++) {
-                    if (hashArr[tasks[index].name[iIterator - 3] + hyphenLiteral + tasks[index].name[iIterator - 2] + hyphenLiteral
-                        + tasks[index].name[iIterator - 1]] === undefined) {
-                        hashArr[tasks[index].name[iIterator - 3] + hyphenLiteral
-                            + tasks[index].name[iIterator - 2] + hyphenLiteral + tasks[index].name[iIterator - 1]] = [];
+                    if (hashArr[`id` + hyphenLiteral + tasks[index].name[iIterator - 1]] === undefined) {
+                        hashArr[`id` + hyphenLiteral + tasks[index].name[iIterator - 1]] = [];
                     }
-                    hashArr[tasks[index].name[iIterator - 3] + hyphenLiteral + tasks[index].name[iIterator - 2] + hyphenLiteral
-                        + tasks[index].name[iIterator - 1]].push(tasks[index]);
+                    hashArr[`id` + hyphenLiteral + tasks[index].name[iIterator - 1]].push(tasks[index]);
                 }
 
                 Object.keys(hashArr).forEach(function (i: string): void {
@@ -2130,17 +2124,15 @@ module powerbi.extensibility.visual {
                 hashArr = [];
                 const hyphenLiteral: string = '-';
                 for (let index: number = 0; index <= largest; index++) {
-                    if (hashArr[tasks[index].name[levelofSorting - 3] + hyphenLiteral
-                        + tasks[index].name[levelofSorting - 2] + hyphenLiteral + tasks[index].name[levelofSorting - 1]] === undefined) {
-                        hashArr[tasks[index].name[levelofSorting - 3] + hyphenLiteral + tasks[index].name[levelofSorting - 2]
-                            + hyphenLiteral + tasks[index].name[levelofSorting - 1]] = [];
+                    if (hashArr[`id` + hyphenLiteral + tasks[index].name[levelofSorting - 1]] === undefined) {
+                        hashArr[`id` + hyphenLiteral + tasks[index].name[levelofSorting - 1]] = [];
                     }
-                    hashArr[tasks[index].name[levelofSorting - 3] + hyphenLiteral + tasks[index].name[levelofSorting - 2]
-                        + hyphenLiteral + tasks[index].name[levelofSorting - 1]].push(tasks[index]);
+                    hashArr[`id` + hyphenLiteral + tasks[index].name[levelofSorting - 1]].push(tasks[index]);
                 }
                 if (!firstVisit) {
                     orderOfSorting = 'asc';
                 }
+
                 Object.keys(hashArr).forEach(function (i: string): void {
                     // tslint:disable-next-line:no-any
                     hashArr[i].sort(function (m: any, n: any): number {
@@ -2415,7 +2407,7 @@ module powerbi.extensibility.visual {
                     if (iIterator === 0) {
                         if (categoryLength === 1) {
                             Gantt.categoryColumnsWidth += columnLiteral + iIterator + colonLiteral
-                                + parseFloat($('.gantt_kpiPanel').css('left')) + semiColonLiteral;
+                                + parseFloat(ganttKpiPanelJQuery.css('left')) + semiColonLiteral;
                         } else {
                             Gantt.categoryColumnsWidth += columnLiteral + iIterator + colonLiteral
                                 + parseFloat($(headerCellClassLiteral + (iIterator + 1)).attr('x')) + semiColonLiteral;
@@ -2577,7 +2569,6 @@ module powerbi.extensibility.visual {
                     }
                 }
             }
-            //tooltipDataArray = [];
             let tooltipIndexLength: number;
             tooltipIndexLength = tooltipIndexNew.length;
 
@@ -2601,15 +2592,10 @@ module powerbi.extensibility.visual {
                         identity: { metadata: currentColumn.queryName }
                     });
                 }
-            }
-
-            for (let iIterator: number = 0; iIterator < metadataColumnsLength; iIterator++) {
-
                 if (metadata.columns[iIterator].roles[GanttRoles.resource]) {
                     resourceFeild = metadata.columns[iIterator].displayName;
                 }
             }
-
             // tslint:disable-next-line:no-any
             let newKpiData: any = [];
             // tslint:disable-next-line:no-any
@@ -2640,38 +2626,121 @@ module powerbi.extensibility.visual {
             const rows1: any[] = [];
 
             let iRow: number;
-            let iColumn: number;
-            let categoryIterator: number = 0;
-            let measureIterator: number = 0;
             const len: number = dataView.categorical.categories[0].values.length;
             const cLength: number = dataView.metadata.columns.length;
             const mappingIndex: number[] = [];
             const categoriesLength: number = dataView.categorical.categories.length;
+            const valuesLength: number = dataView.categorical.values.length;
 
-            // tslint:disable-next-line:no-shadowed-variable
-            for (let iterator: number = 0; iterator < cLength; iterator++) {
-                if (!dataView.metadata.columns[iterator].isMeasure) {
-                    // tslint:disable-next-line:no-shadowed-variable
-                    for (let categoryIterator: number = 0; categoryIterator < categoriesLength; categoryIterator++) {
-                        if (dataView.metadata.columns[iterator].displayName ===
-                            dataView.categorical.categories[categoryIterator].source.displayName) {
-                            mappingIndex.push(categoryIterator);
-                            break;
-                        }
+            // tslint:disable-next-line
+            let roleIndexArray: any[] = [];
+            roleIndexArray[`Category`] = [];
+            roleIndexArray[`Legend`] = [];
+            roleIndexArray[`StartDate`] = [];
+            roleIndexArray[`EndDate`] = [];
+            roleIndexArray[`Resource`] = [];
+            roleIndexArray[`KPIValueBag`] = [];
+            roleIndexArray[`Tooltip`] = [];
+            // tslint:disable-next-line
+            let displayNameArray: any[] = [];
+            for (let iCount: number = 0; iCount < categoriesLength; iCount++) {
+                if (dataView.categorical.categories[iCount].source.roles.Category) {
+                    roleIndexArray[`Category`].push(iCount);
+                }
+                if (dataView.categorical.categories[iCount].source.roles.Legend) {
+                    roleIndexArray[`Legend`].push(iCount);
+                }
+                if (dataView.categorical.categories[iCount].source.roles.KPIValueBag) {
+                    roleIndexArray[`KPIValueBag`].push(iCount);
+                }
+            }
+
+            if (roleIndexArray[`Legend`].length !== 0) {
+                if (roleIndexArray[`Legend`].length === 3) {
+                    roleIndexArray[`Legend`].splice(2, 1);
+                }
+                if (roleIndexArray[`Legend`].length === 2) {
+                    roleIndexArray[`Legend`].splice(0, 1);
+                }
+                const index: number = roleIndexArray[`Category`].indexOf(roleIndexArray[`Legend`][0]);
+                if (index !== -1) {
+                    roleIndexArray[`Category`].splice(index, 1);
+                }
+                const iIndex: number = roleIndexArray[`KPIValueBag`].indexOf(roleIndexArray[`Legend`][0]);
+                if (iIndex !== -1) {
+                    roleIndexArray[`KPIValueBag`].splice(iIndex, 1);
+                }
+                let indexNew: number;
+                for (let iCat: number = 0; iCat < roleIndexArray[`KPIValueBag`].length; iCat++) {
+                    indexNew = roleIndexArray[`Category`].indexOf(roleIndexArray[`KPIValueBag`][iCat]);
+                    if (indexNew !== -1 && index !== 0) {
+                        roleIndexArray[`Category`].splice(indexNew, 1);
+                        roleIndexArray[`KPIValueBag`].splice(0, 1);
+                        break;
                     }
                 }
             }
 
+            for (let iCount: number = 0; iCount < valuesLength; iCount++) {
+                if (dataView.categorical.values[iCount].source.roles.StartDate) {
+                    roleIndexArray[`StartDate`].push(iCount);
+                }
+                if (dataView.categorical.values[iCount].source.roles.EndDate) {
+                    roleIndexArray[`EndDate`].push(iCount);
+                }
+                if (dataView.categorical.values[iCount].source.roles.Resource) {
+                    roleIndexArray[`Resource`].push(iCount);
+                }
+                if (dataView.categorical.values[iCount].source.roles.Tooltip) {
+                    roleIndexArray[`Tooltip`].push(iCount);
+                }
+            }
+
+            const totalLength: number = categoriesLength + valuesLength;
             for (iRow = 0; iRow < len; iRow++) {
                 rows1[iRow] = [];
-                categoryIterator = 0;
-                measureIterator = 0;
-                for (iColumn = 0; iColumn < cLength; iColumn++) {
-                    if (dataView.metadata.columns[iColumn].isMeasure === true) {
-                        rows1[iRow][iColumn] = dataView.categorical.values[categoryIterator++].values[iRow];
-                    } else {
-                        rows1[iRow][iColumn] = dataView.categorical.categories[mappingIndex[measureIterator++]].values[iRow];
+                let iColumn: number = 0;
+                for (let iCat: number = 0; iCat < roleIndexArray[`Category`].length; iCat++) {
+
+                    rows1[iRow][iColumn] = dataView.categorical.categories[roleIndexArray[`Category`][iCat]].values[iRow];
+
+                    if (displayNameArray.length < totalLength) {
+                        displayNameArray.push(dataView.categorical.categories[roleIndexArray[`Category`][iCat]].source.displayName);
                     }
+                    iColumn++;
+                }
+
+                rows1[iRow][iColumn] = dataView.categorical.values[roleIndexArray[`StartDate`][0]].values[iRow];
+                if (displayNameArray.length < totalLength) {
+                    displayNameArray.push(dataView.categorical.values[roleIndexArray[`StartDate`][0]].source.displayName);
+                }
+
+                iColumn++;
+                rows1[iRow][iColumn] = dataView.categorical.values[roleIndexArray[`EndDate`][0]].values[iRow];
+                if (displayNameArray.length < totalLength) {
+                    displayNameArray.push(dataView.categorical.values[roleIndexArray[`EndDate`][0]].source.displayName);
+                }
+                iColumn++;
+                for (let iCat: number = 0; iCat < roleIndexArray[`Resource`].length; iCat++) {
+                    rows1[iRow][iColumn] = dataView.categorical.values[roleIndexArray[`Resource`][iCat]].values[iRow];
+                    if (displayNameArray.length < totalLength) {
+                        displayNameArray.push(dataView.categorical.values[roleIndexArray[`Resource`][iCat]].source.displayName);
+                    }
+                    iColumn++;
+                }
+                for (let iCat: number = 0; iCat < roleIndexArray[`KPIValueBag`].length; iCat++) {
+                    rows1[iRow][iColumn] = dataView.categorical.categories[roleIndexArray[`KPIValueBag`][iCat]].values[iRow];
+                    if (displayNameArray.length < totalLength) {
+                        displayNameArray.push(dataView.categorical.categories[roleIndexArray[`KPIValueBag`][iCat]].source.displayName);
+                    }
+                    iColumn++;
+                }
+                for (let iCat: number = 0; iCat < roleIndexArray[`Tooltip`].length; iCat++) {
+                    rows1[iRow][iColumn] = dataView.categorical.values[roleIndexArray[`Tooltip`][iCat]].values[iRow];
+                    if (displayNameArray.length < totalLength) {
+                        displayNameArray.push(dataView.categorical.values[roleIndexArray[`Tooltip`][iCat]].source.displayName);
+                    }
+                    iColumn++;
                 }
             }
             // tslint:disable-next-line:no-any
@@ -2713,8 +2782,8 @@ module powerbi.extensibility.visual {
 
                 // tslint:disable-next-line:no-any
                 ele.forEach(function (e: any, ii: any): void {
-                    if (!obj[columns[ii].displayName]) {
-                        obj[columns[ii].displayName] = e;
+                    if (!obj[displayNameArray[ii]]) {
+                        obj[displayNameArray[ii]] = e;
                     }
                 });
 
@@ -2726,8 +2795,6 @@ module powerbi.extensibility.visual {
             categoryColumns = categoriesdata.filter(function (column) {
                 return !column.isMeasure || !kpiData;
             });
-            $.unique(categoryColumns);
-
             // tslint:disable-next-line:prefer-const
             let categorylen: number = categoryColumns.length;
             let legendIndex1: number = -1;
@@ -2882,106 +2949,108 @@ module powerbi.extensibility.visual {
                 }
             });
 
-            // tslint:disable-next-line:no-any
-            elementIterator.forEach(function (d: any, i: any): any {
-                // Keep this as a reference to the current level
+            if (settings.taskLabels.isHierarchy) {
                 // tslint:disable-next-line:no-any
-                let depthCursor: any = hierarchicalData.children;
-                // tslint:disable-next-line:no-shadowed-variable
-                let kpiValues: KPIValues[];
-                kpiValues = [];
-                // tslint:disable-next-line:no-shadowed-variable
-                let tooltipValues: tooltipDataValues[];
-                tooltipValues = [];
-                // tslint:disable-next-line:no-any
-                const resourceValues: any = [];
-                // tslint:disable-next-line:no-any
-                const measure: any = [];
-                // Go down one level at a time
-                // tslint:disable-next-line:no-any
-                levels.forEach(function (property: any, depth: any): void {
-                    // Look to see if a branch has already been created
+                elementIterator.forEach(function (d: any, i: any): any {
+                    // Keep this as a reference to the current level
                     // tslint:disable-next-line:no-any
-                    let index: any;
+                    let depthCursor: any = hierarchicalData.children;
+                    // tslint:disable-next-line:no-shadowed-variable
+                    let kpiValues: KPIValues[];
+                    kpiValues = [];
+                    // tslint:disable-next-line:no-shadowed-variable
+                    let tooltipValues: tooltipDataValues[];
+                    tooltipValues = [];
                     // tslint:disable-next-line:no-any
-                    depthCursor.forEach(function (child: any, ind: any): void {
-                        if (child.children.length > 0) {
-                            if (d[property] === child.name) { index = ind; }
+                    const resourceValues: any = [];
+                    // tslint:disable-next-line:no-any
+                    const measure: any = [];
+                    // Go down one level at a time
+                    // tslint:disable-next-line:no-any
+                    levels.forEach(function (property: any, depth: any): void {
+                        // Look to see if a branch has already been created
+                        // tslint:disable-next-line:no-any
+                        let index: any;
+                        // tslint:disable-next-line:no-any
+                        depthCursor.forEach(function (child: any, ind: any): void {
+                            if (child.children.length > 0) {
+                                if (d[property] === child.name) { index = ind; }
+                            }
+                        });
+                        // Add a branch if it isn't there
+
+                        if (isNaN(index)) {
+                            depthCursor.push({
+                                name: d[property], children: [], measure: {}
+                                , kpiMeasure: {}, color, kpiValues: [], tooltipValues: [], resource
+                            });
+                            index = depthCursor.length - 1;
                         }
-                    });
-                    // Add a branch if it isn't there
-
-                    if (isNaN(index)) {
-                        depthCursor.push({
-                            name: d[property], children: [], measure: {}
-                            , kpiMeasure: {}, color, kpiValues: [], tooltipValues: [], resource
-                        });
-                        index = depthCursor.length - 1;
-                    }
-                    // tslint:disable-next-line:no-any
-                    const measures: any = {};
-                    // tslint:disable-next-line:no-any
-                    const kpiMeasures: any = {};
-                    // if this is a leaf, add the measure values, else add 0 as the measure value
-                    if (depth === levels.length - 1) {
-                        kpiValues = [];
                         // tslint:disable-next-line:no-any
-                        kpiData.forEach(function (kpiMeasure: any): void {
-                            kpiValues.push({
-                                name: kpiMeasure.name,
-                                value: d[kpiMeasure.name]
-                            });
-
-                        });
-                        // tslint:disable-next-line
-                        let index : number = 0;
+                        const measures: any = {};
                         // tslint:disable-next-line:no-any
-                        tooltipIndexNew.forEach(function (tooltipMeasure: any): void {
-                            tooltipValues.push({
-                                name: tooltipIndexNew[index],
-                                value: d[tooltipMeasure]
+                        const kpiMeasures: any = {};
+                        // if this is a leaf, add the measure values, else add 0 as the measure value
+                        if (depth === levels.length - 1) {
+                            kpiValues = [];
+                            // tslint:disable-next-line:no-any
+                            kpiData.forEach(function (kpiMeasure: any): void {
+                                kpiValues.push({
+                                    name: kpiMeasure.name,
+                                    value: d[kpiMeasure.name]
+                                });
+
                             });
-                            index++;
-                        });
-                        resource = d[resourceFeild] === undefined ? '' : d[resourceFeild];
-                        if (typeof d[startDisplayName] !== 'number') {
-                            start = new Date (d[startDisplayName]);
-                            end = new Date (d[endDisplayName]);
+                            // tslint:disable-next-line
+                            let index: number = 0;
+                            // tslint:disable-next-line:no-any
+                            tooltipIndexNew.forEach(function (tooltipMeasure: any): void {
+                                tooltipValues.push({
+                                    name: tooltipIndexNew[index],
+                                    value: d[tooltipMeasure]
+                                });
+                                index++;
+                            });
+                            resource = d[resourceFeild] === undefined ? '' : d[resourceFeild];
+                            if (typeof d[startDisplayName] !== 'number') {
+                                start = new Date(d[startDisplayName]);
+                                end = new Date(d[endDisplayName]);
+                            } else {
+                                numStart = null === d[startDisplayName] ? d[endDisplayName] : d[startDisplayName];
+                                numEnd = null === d[endDisplayName] ? d[startDisplayName] : d[endDisplayName];
+                            }
+
                         } else {
-                            numStart = null === d[startDisplayName] ? d[endDisplayName] : d[startDisplayName];
-                            numEnd = null === d[endDisplayName] ? d[startDisplayName] : d[endDisplayName];
-                        }
+                            kpiValues = [];
+                            // tslint:disable-next-line:no-any
+                            kpiData.forEach(function (kpiMeasure: any): void {
+                                kpiValues.push({
+                                    name: kpiMeasure.name,
+                                    value: null
+                                });
 
-                    } else {
-                        kpiValues = [];
-                        // tslint:disable-next-line:no-any
-                        kpiData.forEach(function (kpiMeasure: any): void {
-                            kpiValues.push({
-                                name: kpiMeasure.name,
-                                value: null
                             });
 
-                        });
-
-                        resource = null;
-                        tooltipInfo = null;
-                        start = null;
-                        end = null;
-                        numStart = null;
-                        numEnd = null;
-                    }
-                    depthCursor[index].kpiValues = kpiValues;
-                    depthCursor[index].tooltipValues = tooltipValues;
-                    depthCursor[index].resource = resource;
-                    depthCursor[index].measure = measures;
-                    depthCursor[index].start = start;
-                    depthCursor[index].end = end;
-                    depthCursor[index].numStart = numStart;
-                    depthCursor[index].numEnd = numEnd;
-                    // Now reference the new child array as we go deeper into the tree
-                    depthCursor = depthCursor[index].children;
+                            resource = null;
+                            tooltipInfo = null;
+                            start = null;
+                            end = null;
+                            numStart = null;
+                            numEnd = null;
+                        }
+                        depthCursor[index].kpiValues = kpiValues;
+                        depthCursor[index].tooltipValues = tooltipValues;
+                        depthCursor[index].resource = resource;
+                        depthCursor[index].measure = measures;
+                        depthCursor[index].start = start;
+                        depthCursor[index].end = end;
+                        depthCursor[index].numStart = numStart;
+                        depthCursor[index].numEnd = numEnd;
+                        // Now reference the new child array as we go deeper into the tree
+                        depthCursor = depthCursor[index].children;
+                    });
                 });
-            });
+            }
             // tslint:disable-next-line:no-any
             const tasknewarray: any = [];
             let categorylenn: number = 0;
@@ -3286,68 +3355,50 @@ module powerbi.extensibility.visual {
                         .withMeasure(d.toString())
                         .createSelectionId()  //selectionId of the legend
                 });
-            });
-            legenduniquecolors = legendData.dataPoints;
-            if (legendIndex !== -1) {
-                barsLegend.changeOrientation(LegendPosition.Top);
-                barsLegend.drawLegend(legendData, viewport);
-                position(d3.select('.gantt-body'), barsLegend);
-            }
-            toArray(hierarchicalData, -1, rowId);
-            //tslint:disable-next-line
-            const newArr: any = [];
-            //tslint:disable-next-line
-            const newColors: any = [];
-            let uniqueCount: number = uniquelegend.length;
-            while (uniqueCount >= 0) {
-                newArr.push(uniquelegend[uniqueCount]);
-                uniqueCount--;
-            }
-            for (let i: number = 0; i < transformedArr.length; i++) {
-                // tslint:disable-next-line:no-shadowed-variable
-                for (let j: number = 0; j < newArr.length; j++) {
-                    if (transformedArr[i].name === newArr[j]) {
-                        newColors.push({ color: transformedArr[i].color });
-                        delete newArr[j];
-                        //tslint:disable-next-line
-                    }
-                }
-            }
-            legendData.dataPoints = [];
-            uniqueColors = [];
-            uniquelegend.forEach(function (d: PrimitiveValue, ijk: number): void {
-                legendData.dataPoints.push({
-                    label: d.toString(),  //name of the label
-                    color: newColors[ijk].color,
-                    icon: powerbi.extensibility.utils.chart.legend.LegendIcon.Box, //type of the legend icon,
-                    selected: false,  // indicates of the legend is selected or not
-                    identity: host.createSelectionIdBuilder()
-                        .withMeasure(d.toString())
-                        .createSelectionId()  //selectionId of the legend
-                });
                 uniqueColors.push({
                     name: d,
                     color: rows.color
                 });
             });
-            rows = transformedArr.reverse();
-            rows.splice(0, 1);
-            let rowindex: number = 0;
-            tasknewarray.reverse();
-            for (let index: number = 0; index < rows.length; index++) {
-                rows[index].selectionId = [];
-                if (rows[index].name.toString() === tasknewarray[rowindex].name.toString()) {
-                    rows[index].selectionId = tasknewarray[rowindex].selectionId;
-                    rowindex++;
-                    if (rowindex === tasknewarray.length) {
-                        break;
-                    }
-                }
+            legenduniquecolors = legendData.dataPoints;
+            if (legendIndex !== -1) {
+                barsLegend.changeOrientation(LegendPosition.Top);
+                barsLegend.drawLegend(legendData, viewport);
+                position(ganttBody, barsLegend);
             }
             if (settings.taskLabels.isHierarchy) {
+                toArray(hierarchicalData, -1, rowId);
+                rows = transformedArr.reverse();
+                rows.splice(0, 1);
+                let rowindex: number = 0;
+                tasknewarray.reverse();
+                for (let index: number = 0; index < rows.length; index++) {
+                    rows[index].selectionId = [];
+                    if (rows[index].name.toString() === tasknewarray[rowindex].name.toString()) {
+                        rows[index].selectionId = tasknewarray[rowindex].selectionId;
+                        rowindex++;
+                        if (rowindex === tasknewarray.length) {
+                            break;
+                        }
+                    }
+                }
                 addSelection(rows);
+                // tslint:disable-next-line:typedef
+                transformedArr = transformedArr.sort(function (a, b) {
+                    return a.id > b.id ? 1 : a.id < b.id ? -1 : 0;
+                });
+                for (let i: number = 0; i < transformedArr.length; i++) {
+                    // tslint:disable-next-line:no-shadowed-variable
+                    for (let j: number = 0; j < uniquelegend.length; j++) {
+                        if (transformedArr[i].name === uniquelegend[j]) {
+                            legendData.dataPoints[j].color = transformedArr[i].color;
+                        }
+                    }
+                }
+                for (let index: number = 0; index < transformedArr.length; index++) {
+                    tasksNew.push(transformedArr[index]);
+                }
             }
-
             // tslint:disable-next-line:typedef
             function addSelection(row) {
                 const categoryLen: number = dataView.categorical.categories.length;
@@ -3458,23 +3509,6 @@ module powerbi.extensibility.visual {
                     }
                 }
             }
-            // tslint:disable-next-line:typedef
-            transformedArr = transformedArr.sort(function (a, b) {
-                return a.id > b.id ? 1 : a.id < b.id ? -1 : 0;
-            });
-            for (let i: number = 0; i < transformedArr.length; i++) {
-                // tslint:disable-next-line:no-shadowed-variable
-                for (let j: number = 0; j < uniquelegend.length; j++) {
-                    if (transformedArr[i].name === uniquelegend[j]) {
-                        legendData.dataPoints[j].color = transformedArr[i].color;
-                    }
-                }
-            }
-            if (settings.taskLabels.isHierarchy) {
-                for (let index: number = 0; index < transformedArr.length; index++) {
-                    tasksNew.push(transformedArr[index]);
-                }
-            }
 
             let rowIndex: number = 0;
             // tslint:disable-next-line:no-any
@@ -3493,6 +3527,8 @@ module powerbi.extensibility.visual {
             }
             let mycolor: string;
             for (let iIterator: number = 0; iIterator < tasksNew.length; iIterator++) {
+                tasksNew[iIterator].tooltipInfo = Gantt.getTooltipInfo(tasksNew[iIterator],
+                                                                       this.formatters, dataView, iIterator);
                 for (let kIterator: number = 0; kIterator < legendData.dataPoints.length; kIterator++) {
                     // tslint:disable-next-line:no-any
                     const seltaskName: any = tasksNew[iIterator].name;
@@ -3509,12 +3545,6 @@ module powerbi.extensibility.visual {
                     }
 
                 }
-            }
-
-            // tslint:disable-next-line:typedef
-            for (let tooltipLength = 0; tooltipLength < tasksNew.length; tooltipLength++) {
-                tasksNew[tooltipLength].tooltipInfo = Gantt.getTooltipInfo(tasksNew[tooltipLength],
-                                                                           this.formatters, dataView, tooltipLength);
             }
 
             return {
@@ -3569,6 +3599,16 @@ module powerbi.extensibility.visual {
         // tslint:disable-next-line:cyclomatic-complexity
         public update(options: VisualUpdateOptions): void {
             d3.selectAll('.legend').remove();
+            ganttBody = d3.select('.gantt-body');
+            toggleIconId = d3.select('#gantt_ToggleIcon');
+            ganttBottomTaskDiv =  $('.gantt_bottomTaskDiv');
+            ganttLegendPanel = d3.select('.gantt_legendPanel');
+            ganttTaskRect = $('.gantt_task-rect');
+            ganttToggleTask = $('.gantt_toggle-task');
+            ganttKPIClass = $('.gantt_kpiClass');
+            ganttTaskResouce = $('.gantt_task-resource');
+            ganttKPIToggle = d3.select('#gantt_KPIToggle');
+            ganttKpiPanelJQuery = $('.gantt_kpiPanel');
             uniquelegend = [];
             uniquesColorsForLegends = [];
             Gantt.arrGantt = [];
@@ -3576,15 +3616,28 @@ module powerbi.extensibility.visual {
             Gantt.kpiLabelWidth = 75;
             Gantt.globalOptions = options;
             Gantt.dataMAX = Gantt.minSafeInteger;
-            position(d3.select('.gantt-body'), this.barsLegend);
-            if (!options.dataViews || !options.dataViews[0]) {
+            // tslint:disable-next-line:no-any
+            const categoriesArray: any = options.dataViews[0].categorical.categories;
+            // tslint:disable-next-line:no-any
+            const valuesArray: any = options.dataViews[0].categorical.values;
+            const categoryLength: number = options.dataViews[0].categorical.categories.length;
+            const valuesLength: number = options.dataViews[0].categorical.values.length;
+            // tslint:disable-next-line:no-any
+            const dataview: any = options.dataViews[0];
+            position(ganttBody, this.barsLegend);
+            if (!options.dataViews || !options.dataViews[0] || options.dataViews[0].categorical.categories[0].values.length === 0) {
                 this.clearViewport();
+                Gantt.ganttDiv.classed('gantt_hidden', true);
+                Gantt.errorDiv.classed('gantt_hidden', false);
+                let errorStatement: string;
+                errorStatement = 'There is no data to display';
+                Gantt.errorText.text(errorStatement);
 
                 return;
             }
 
-            for (let index: number = 0; index < options.dataViews[0].categorical.categories.length; index++) {
-                if (options.dataViews[0].categorical.categories[index].source.roles.Legend === true) {
+            for (let index: number = 0; index < categoryLength; index++) {
+                if (categoriesArray[index].source.roles.Legend === true) {
                     iterator = 1;
                     break;
                 }
@@ -3593,22 +3646,14 @@ module powerbi.extensibility.visual {
                 this.barsLegend = createLegend(this.bodyElement, false, null, true);
             }
 
-            if (!options.dataViews || !options.dataViews[0]) {
-                this.clearViewport();
-
-                return;
-            }
-
             let hasStart: boolean = false;
             let hasEnd: boolean = false;
-            if (options.dataViews[0].categorical.values) {
-                let iValuesLength: number;
-                iValuesLength = options.dataViews[0].categorical.values.length;
-                for (let iCounter: number = 0; iCounter < iValuesLength; iCounter++) {
-                    if (options.dataViews[0].categorical.values[iCounter].source.roles[startDateLiteral]) {
+            if (valuesArray) {
+                for (let iCounter: number = 0; iCounter < valuesLength; iCounter++) {
+                    if (valuesArray[iCounter].source.roles[startDateLiteral]) {
                         hasStart = true;
                     }
-                    if (options.dataViews[0].categorical.values[iCounter].source.roles[endDateLiteral]) {
+                    if (valuesArray[iCounter].source.roles[endDateLiteral]) {
                         hasEnd = true;
                     }
 
@@ -3627,7 +3672,7 @@ module powerbi.extensibility.visual {
             Gantt.sortLevel = getJSONString2;
             Gantt.prevSortedColumn = getJSONString2;
             const thisObj: this = this;
-            this.viewModel = Gantt.converter(options.dataViews[0], this.host, this.colors, this.barsLegend, options.viewport);
+            this.viewModel = Gantt.converter(dataview, this.host, this.colors, this.barsLegend, options.viewport);
             this.persistExpandCollapseSettings = this.viewModel.settings.persistExpandCollapseSettings;
             this.barsLegend.changeOrientation(LegendPosition.Top);
             Gantt.expandCollapseStates = JSON.parse(this.persistExpandCollapseSettings.expandCollapseState || '{}');
@@ -3638,7 +3683,7 @@ module powerbi.extensibility.visual {
                 this.kpiDiv.remove();
                 this.taskDiv.remove();
             }
-            $('.gantt-body').remove();
+            ganttBody.remove();
             this.createViewport(this.bodyElement);
             this.clearViewport();
             Gantt.ganttDiv.classed('gantt_hidden', true);
@@ -3708,7 +3753,7 @@ module powerbi.extensibility.visual {
             let width: number = 0;
             let widthFromPercent: number = 0;
             let normalizer: number;
-            normalizer = (this.viewModel.settings.taskLabels.fontSize * Gantt.maximumNormalizedFontSize) / Gantt.maximumFontSize;
+            normalizer = this.viewModel.settings.taskLabels.fontSize;
             this.body.append('text')
                 .text('M')
                 .classed('singleCharacter', true)
@@ -3716,6 +3761,7 @@ module powerbi.extensibility.visual {
                     'font-size': normalizer + pxLiteral,
                     'font-family': 'Segoe UI'
                 });
+            singleCharacter = d3.selectAll('.singleCharacter');
 
             let taskLabelsFontSize: number;
             taskLabelsFontSize = this.viewModel.settings.taskLabels.fontSize;
@@ -3738,7 +3784,7 @@ module powerbi.extensibility.visual {
             headerProperties = {
                 text: 'W',
                 fontFamily: headerFontFamily,
-                fontSize: (headerFontSize * Gantt.maximumNormalizedFontSize) / Gantt.maximumFontSize + pxLiteral
+                fontSize: headerFontSize + pxLiteral
             };
 
             iTextWidth = textMeasurementService.measureSvgTextWidth(textProperties);
@@ -3752,7 +3798,7 @@ module powerbi.extensibility.visual {
             if (this.viewModel.settings.taskLabels.width <= 5) {
                 Gantt.singleCharacterWidth = iTextWidth * 0.8;
             }
-            d3.selectAll('.singleCharacter').remove();
+            singleCharacter.remove();
             if (this.viewModel.settings.taskLabels.width < 0) {
                 this.viewModel.settings.taskLabels.width = 0;
             } else if (this.viewModel.settings.taskLabels.width > Gantt.maxTaskNameLength) {
@@ -3807,13 +3853,11 @@ module powerbi.extensibility.visual {
             }
             Gantt.taskLabelWidthOriginal = (Gantt.currentDisplayRatio - Gantt.minDisplayRatio) * this.viewport.width / 100;
 
-            let toggleIconId: Selection<SVGAElement>;
-            toggleIconId = d3.select('#gantt_ToggleIcon');
             if (options.type === 2) {
                 if (this.viewModel.settings.taskLabels.isExpanded) {
                     d3.select('.gantt_task-lines').attr('visibility', 'visible');
                     d3.select('.gantt_toggle-task-group').attr('visibility', 'visible');
-                    $('.gantt_bottomTaskDiv').show();
+                    ganttBottomTaskDiv.show();
                     toggleIconId.attr('href', Gantt.collapseImage);
                     toggleIconId.classed('collapse', true);
                     toggleIconId.classed('expand', false);
@@ -3821,7 +3865,7 @@ module powerbi.extensibility.visual {
                 } else {
                     d3.select('.gantt_task-lines').attr('visibility', 'hidden');
                     d3.select('.gantt_toggle-task-group').attr('visibility', 'hidden');
-                    $('.gantt_bottomTaskDiv').hide();
+                    ganttBottomTaskDiv.hide();
                     toggleIconId.attr('href', Gantt.expandImage);
                     toggleIconId.classed('collapse', false);
                     toggleIconId.classed('expand', true);
@@ -3837,7 +3881,7 @@ module powerbi.extensibility.visual {
             if (Gantt.kpiLabelWidth === 0) {
                 $('.gantt_kpiImagePanel').hide();
             } else {
-                if (d3.select('#gantt_KPIToggle').classed('expand')) {
+                if (ganttKPIToggle.classed('expand')) {
                     Gantt.kpiLabelWidth = 20;
                 }
                 $('.gantt_kpiImagePanel').show();
@@ -3848,7 +3892,7 @@ module powerbi.extensibility.visual {
             };
 
             if (this.viewModel.settings.taskLabels.show) {
-                if (d3.select('#gantt_ToggleIcon').classed('collapse')) {
+                if (toggleIconId.classed('collapse')) {
                     Gantt.taskLabelWidth = Gantt.taskLabelWidthOriginal;
                 } else {
                     Gantt.taskLabelWidth = 0;
@@ -3874,8 +3918,8 @@ module powerbi.extensibility.visual {
                     $('.gantt_kpiPanel, .gantt_kpiTitlePanel, .gantt_kpiImagePanel, .gantt_bottomTaskDiv').show();
                 }
             }
-            if (d3.select('#gantt_ToggleIcon').classed('expand')) {
-                $('.gantt_bottomTaskDiv').hide();
+            if (toggleIconId.classed('expand')) {
+                ganttBottomTaskDiv.hide();
             }
 
             widthFromPercent = this.viewport.width * Gantt.currentDisplayRatio / 100;
@@ -4168,28 +4212,27 @@ module powerbi.extensibility.visual {
             this.adjustResizing(this.viewModel.tasksNew, this.viewModel.settings.taskLabels.width, this.viewModel);
 
             if ((this.viewModel.settings.legend.show
-                && (this.viewport.width > $('.gantt_legendIndicatorPanel').innerWidth() + 100)
-                && this.viewport.height > $('.gantt_legendIndicatorPanel').innerHeight() + 50
+                && (this.viewport.width > ganttLegendIndicatorPanel.innerWidth() + 100)
+                && this.viewport.height > ganttLegendIndicatorPanel.innerHeight() + 50
                 && this.viewModel.kpiData.length > 0)
                 && (parseFloat(d3.select('.gantt_legendPanel').style('left')) > parseFloat(d3.select('.gantt_barPanel').style('left')))) {
                 $('.gantt_legendPanel').show();
                 if ($('#LegendToggleImage').hasClass('visible')) {
-                    $('.gantt_legendIndicatorPanel').show();
+                    ganttLegendIndicatorPanel.show();
                     $('.arrow').show();
                 } else {
-                    $('.gantt_legendIndicatorPanel').hide();
+                    ganttLegendIndicatorPanel.hide();
                     $('.arrow').hide();
                 }
             } else {
                 $('.arrow').hide();
                 $('.gantt_legendPanel').hide();
-                $('.gantt_legendIndicatorPanel').hide();
+                ganttLegendIndicatorPanel.hide();
             }
 
             if (this.interactivityService) {
                 let behaviorOptions: GanttBehaviorOptions;
                 behaviorOptions = {
-                    clearCatcher: this.clearCatcher,
                     taskSelection: this.taskGroup.selectAll(Selectors.singlePhase.selector),
                     legendSelection: this.body.selectAll(Selectors.legendItems.selector),
                     interactivityService: this.interactivityService
@@ -4204,7 +4247,7 @@ module powerbi.extensibility.visual {
                 $('.gantt_drillAllPanel2').width((drillAllPanelWidth - 1) + pxLiteral);
             }
             this.sortCategories(this);
-            if (d3.select('#gantt_ToggleIcon').classed('expand')) {
+            if (toggleIconId.classed('expand')) {
                 $('.gantt_category0').hide();
             }
             // updating visual according to the selections
@@ -4228,19 +4271,19 @@ module powerbi.extensibility.visual {
             }
 
             if (!selections.length) {
-                $('.gantt_task-rect').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                $('.gantt_toggle-task').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                $('.gantt_kpiClass').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                $('.gantt_task-resource').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                ganttTaskRect.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                ganttToggleTask.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                ganttKPIClass.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                ganttTaskResouce.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
                 Gantt.isSelected = false;
 
                 return;
             }
 
-            $('.gantt_task-rect').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
-            $('.gantt_toggle-task').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
-            $('.gantt_kpiClass').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
-            $('.gantt_task-resource').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+            ganttTaskRect.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+            ganttToggleTask.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+            ganttKPIClass.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+            ganttTaskResouce.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
 
             selection1.each(function (d: Task): void {
                 const isSelected: boolean = self.isSelectionIdInArray(selections, d.selectionId);
@@ -4264,13 +4307,13 @@ module powerbi.extensibility.visual {
                     sString = '';
                     let sStr: string;
                     sStr = '';
-                    if ($('.gantt_task-rect').attr('trancheAttr')) {
+                    if (ganttTaskRect.attr('trancheAttr')) {
                         sString = 'trancheAttr';
-                    } else if ($('.gantt_task-rect').attr('projectAttr')) {
+                    } else if (ganttTaskRect.attr('projectAttr')) {
                         sString = 'projectAttr';
-                    } else if ($('.gantt_task-rect').attr('metroAttr')) {
+                    } else if (ganttTaskRect.attr('metroAttr')) {
                         sString = 'metroAttr';
-                    } else if ($('.gantt_task-rect').attr('regionAttr')) {
+                    } else if (ganttTaskRect.attr('regionAttr')) {
                         sString = 'regionAttr';
                     }
                     if (sString) {
@@ -4282,7 +4325,7 @@ module powerbi.extensibility.visual {
                     if ($LegendToggleImageId.hasClass('visible')) {
                         $LegendToggleImageId.removeClass('visible').addClass('notVisible');
                         $LegendToggleImageId.attr('href', Gantt.drillDownImage);
-                        $('.gantt_legendIndicatorPanel').hide();
+                        ganttLegendIndicatorPanel.hide();
                         $('.arrow').hide();
                     }
                 }
@@ -4822,11 +4865,12 @@ module powerbi.extensibility.visual {
                     width: PixelConverter.toString(this.margin.left + axisLength + Gantt.defaultValues.ResourceWidth)
                 });
 
-            if ($('.gantt_bottomPanel').innerHeight() < $('.gantt_barPanel').innerHeight()) {
-                $('.gantt_barPanel').css('width', $('.gantt_barPanel').innerWidth() - 20);
+            ganttBarPanel = $('.gantt_barPanel');
+            if ($('.gantt_bottomPanel').innerHeight() < ganttBarPanel.innerHeight()) {
+                ganttBarPanel.css('width', ganttBarPanel.innerWidth() - 20);
             }
             let currentScrollPosition: string;
-            if ($('.gantt_barPanel').innerWidth() < thisObj.margin.left + axisLength + Gantt.defaultValues.ResourceWidth) {
+            if (ganttBarPanel.innerWidth() < thisObj.margin.left + axisLength + Gantt.defaultValues.ResourceWidth) {
                 let bottomMilestoneScrollPosition: number = 0;
                 if (Gantt.isDateData) {
                     currentScrollPosition = thisObj.viewModel.settings.scrollPosition.position.toLowerCase();
@@ -4946,13 +4990,13 @@ module powerbi.extensibility.visual {
                 if ($LegendToggleImageId.hasClass('notVisible')) {
                     $LegendToggleImageId.removeClass('notVisible').addClass('visible');
                     $LegendToggleImageId.attr('href', Gantt.drillUpImage);
-                    $($('.gantt_legendIndicatorPanel')[0]).css('top', 49 + pxLiteral);
-                    $('.gantt_legendIndicatorPanel').show();
+                    $(ganttLegendIndicatorPanel[0]).css('top', 49 + pxLiteral);
+                    ganttLegendIndicatorPanel.show();
                     $('.arrow').show();
                 } else {
                     $LegendToggleImageId.removeClass('visible').addClass('notVisible');
                     $LegendToggleImageId.attr('href', Gantt.drillDownImage);
-                    $('.gantt_legendIndicatorPanel').hide();
+                    ganttLegendIndicatorPanel.hide();
                     $('.arrow').hide();
                 }
             });
@@ -4966,7 +5010,7 @@ module powerbi.extensibility.visual {
                 if ($LegendToggleImageId.hasClass('visible')) {
                     $LegendToggleImageId.removeClass('visible').addClass('notVisible');
                     $LegendToggleImageId.attr('href', Gantt.drillDownImage);
-                    $('.gantt_legendIndicatorPanel').hide();
+                    ganttLegendIndicatorPanel.hide();
                     $('.arrow').hide();
                 }
             });
@@ -4978,7 +5022,7 @@ module powerbi.extensibility.visual {
                 if ($LegendToggleImageId.hasClass('visible')) {
                     $LegendToggleImageId.removeClass('visible').addClass('notVisible');
                     $LegendToggleImageId.attr('href', Gantt.drillDownImage);
-                    $('.gantt_legendIndicatorPanel').hide();
+                    ganttLegendIndicatorPanel.hide();
                     $('.arrow').hide();
                 }
             });
@@ -4987,7 +5031,7 @@ module powerbi.extensibility.visual {
         private expandCollapseTaskKPIPanel(
             thisObj: Gantt, elementId: string, elementClass: string,
             elementGroupClass: string, isTaskLabel: boolean): void {
-            $('.gantt_barPanel').not(':first').remove();
+            ganttBarPanel.not(':first').remove();
             let $LegendToggleImageId: JQuery;
             $LegendToggleImageId = $('#LegendToggleImage');
             if (!$LegendToggleImageId.hasClass('visible')) {
@@ -5002,7 +5046,7 @@ module powerbi.extensibility.visual {
                 element.classed('collapse', false);
                 element.classed('expand', true);
                 if (elementId === '#gantt_ToggleIcon') {
-                    $('.gantt_bottomTaskDiv').hide();
+                    ganttBottomTaskDiv.hide();
                 }
                 if (isTaskLabel) {
                     Gantt.taskLabelWidth = -4;
@@ -5016,7 +5060,7 @@ module powerbi.extensibility.visual {
                 element.classed('collapse', true);
                 element.classed('expand', false);
                 if (elementId === '#gantt_ToggleIcon') {
-                    $('.gantt_bottomTaskDiv').show();
+                    ganttBottomTaskDiv.show();
                 }
                 if (isTaskLabel) {
                     Gantt.taskLabelWidth = (Gantt.currentDisplayRatio - Gantt.minDisplayRatio) * this.viewport.width / 100;
@@ -5025,9 +5069,9 @@ module powerbi.extensibility.visual {
                 }
             }
             thisObj.redrawChart(thisObj);
-            if (d3.select('#gantt_ToggleIcon').classed('expand')) {
+            if (toggleIconId.classed('expand')) {
                 $('.gantt_category0').hide();
-                $('.gantt_bottomTaskDiv').hide();
+                ganttBottomTaskDiv.hide();
             }
             if (d3.select('.gantt_drillAllPanel2')[0][0] &&
                 d3.select('.gantt_taskPanel')[0][0] &&
@@ -5047,8 +5091,6 @@ module powerbi.extensibility.visual {
                         Gantt.sortOrder = 'asc';
                     }
                     Gantt.sortLevel = iCounter;
-                    // thisObj.viewModel = Gantt.converter(Gantt.globalOptions.dataViews[0], thisObj.host,
-                    //                                     thisObj.colors, thisObj.barsLegend, thisObj.viewport);
 
                     for (let jCounter: number = 0; jCounter < Gantt.numberOfCategories; jCounter++) {
                         if (jCounter !== iCounter) {
@@ -5073,7 +5115,7 @@ module powerbi.extensibility.visual {
             $('.milestoneHighlighted').removeClass('milestoneHighlighted');
             $('.phaseHighlighted').removeClass('phaseHighlighted');
             $('.activeLegend').removeClass('activeLegend');
-            $('.gantt_task-rect').removeClass('gantt_loweropacity').removeClass('gantt_higheropacity').removeClass('gantt_activeRect');
+            ganttTaskRect.removeClass('gantt_loweropacity').removeClass('gantt_higheropacity').removeClass('gantt_activeRect');
             $('.gantt_task-progress').removeClass('gantt_loweropacity')
                 .removeClass('gantt_higheropacity').removeClass('gantt_activeProgress');
             $('.gantt_actual-milestone').removeClass('gantt_loweropacity')
@@ -5088,7 +5130,7 @@ module powerbi.extensibility.visual {
             $('.milestoneHighlighted').removeClass('milestoneHighlighted');
             $('.phaseHighlighted').removeClass('phaseHighlighted');
             $('.activeLegend').removeClass('activeLegend');
-            $('.gantt_task-rect').addClass('gantt_loweropacity').removeClass('gantt_higheropacity').removeClass('gantt_activeRect');
+            ganttTaskRect.addClass('gantt_loweropacity').removeClass('gantt_higheropacity').removeClass('gantt_activeRect');
             $('.gantt_task-progress').addClass('gantt_loweropacity').removeClass('gantt_higheropacity').removeClass('gantt_activeProgress');
             $('.gantt_actual-milestone').addClass('gantt_loweropacity')
                 .removeClass('gantt_higheropacity').removeClass('gantt_activeMilestone');
@@ -5370,10 +5412,10 @@ module powerbi.extensibility.visual {
             taskGridLinesInterval = this.viewModel.settings.taskGridlines.interval;
             taskGridLinesColor = this.viewModel.settings.taskGridlines.fill;
             this.gridGroup.selectAll('*').remove();
-            $('.gantt_barPanel')
+            ganttBarPanel
                 .css('width', PixelConverter.toString(this.viewport.width - Gantt.taskLabelWidth - Gantt.kpiLabelWidth - 20))
                 .css('left', PixelConverter.toString(Gantt.taskLabelWidth + Gantt.kpiLabelWidth + 20));
-            $('.gantt_bottomTaskDiv')
+            ganttBottomTaskDiv
                 .css('width', PixelConverter.toString(Gantt.taskLabelWidth + 20));
             let xAxis: d3.svg.Axis;
             xAxis = xAxisProperties.axis;
@@ -5501,6 +5543,7 @@ module powerbi.extensibility.visual {
             let barPanelLeft: number;
             let kpiPanelWidth: number;
             let lastRectX: number;
+            ganttLegendIndicatorPanel = $('.gantt_legendIndicatorPanel');
             thisObj = this;
             columnHeaderColor = this.viewModel.settings.columnHeader.fill;
             columnHeaderBgColor = this.viewModel.settings.columnHeader.fill2;
@@ -5514,7 +5557,7 @@ module powerbi.extensibility.visual {
             taskLabelsFontFamily = this.viewModel.settings.taskLabels.fontFamily;
             totalKPIs = this.viewModel.kpiData.length;
             totalCategories = tasks[0].name.length;
-            normalizer = (this.viewModel.settings.taskLabels.fontSize * Gantt.maximumNormalizedFontSize) / Gantt.maximumFontSize;
+            normalizer = this.viewModel.settings.taskLabels.fontSize;
             kpiFontSize = 23 * Gantt.maximumNormalizedFontSize / Gantt.maximumFontSize;
             kpiFontColor = '#000';
             this.kpiTitleGroup.selectAll('*').remove();
@@ -5762,8 +5805,7 @@ module powerbi.extensibility.visual {
                             d3.select(categoryClassLiteral + jCount)
                                 .text(Gantt.categoriesTitle[jCount])
                                 .style({
-                                    'font-size': (columnHeaderFontSize * Gantt.maximumNormalizedFontSize) /
-                                        Gantt.maximumFontSize + pxLiteral,
+                                    'font-size': columnHeaderFontSize + pxLiteral,
                                     'font-family': columnHeaderFontFamily,
                                     fill: columnHeaderColor,
                                     'background-color': columnHeaderBgColor
@@ -5776,8 +5818,7 @@ module powerbi.extensibility.visual {
                             d3.select(categoryClassLiteral + jCount)
                                 .text(Gantt.categoriesTitle[jCount])
                                 .style({
-                                    'font-size': (columnHeaderFontSize * Gantt.maximumNormalizedFontSize) /
-                                        Gantt.maximumFontSize + pxLiteral,
+                                    'font-size': columnHeaderFontSize + pxLiteral,
                                     'font-family': columnHeaderFontFamily,
                                     fill: columnHeaderColor,
                                     'background-color': columnHeaderBgColor
@@ -5794,8 +5835,7 @@ module powerbi.extensibility.visual {
                             d3.select(categoryClassLiteral + jCount)
                                 .text(Gantt.categoriesTitle[jCount])
                                 .style({
-                                    'font-size': (columnHeaderFontSize * Gantt.maximumNormalizedFontSize)
-                                        / Gantt.maximumFontSize + pxLiteral,
+                                    'font-size': columnHeaderFontSize + pxLiteral,
                                     'font-family': columnHeaderFontFamily,
                                     fill: columnHeaderColor,
                                     'background-color': columnHeaderBgColor
@@ -5807,8 +5847,7 @@ module powerbi.extensibility.visual {
                             d3.select(categoryClassLiteral + jCount)
                                 .text(Gantt.categoriesTitle[jCount])
                                 .style({
-                                    'font-size': (columnHeaderFontSize * Gantt.maximumNormalizedFontSize)
-                                        / Gantt.maximumFontSize + pxLiteral,
+                                    'font-size': columnHeaderFontSize + pxLiteral,
                                     'font-family': columnHeaderFontFamily,
                                     fill: columnHeaderColor,
                                     'background-color': columnHeaderBgColor
@@ -5845,7 +5884,7 @@ module powerbi.extensibility.visual {
                     axisKPILabel.attr({
                         x: 3 + (Gantt.kpiLabelWidth / totalKPIs * jCount),
                         y: 15,
-                        'font-size': (columnHeaderFontSize * Gantt.maximumNormalizedFontSize) / Gantt.maximumFontSize + pxLiteral,
+                        'font-size': columnHeaderFontSize + pxLiteral,
                         'font-family': columnHeaderFontFamily,
                         fill: columnHeaderColor,
                         background: columnHeaderBgColor,
@@ -6165,26 +6204,28 @@ module powerbi.extensibility.visual {
                                             'font-size': kpiFontSize + pxLiteral,
                                             'font-family': 'Segoe UI'
                                         });
+                                    // tslint:disable-next-line:no-any
+                                    const singleCharacterLocal: any = $('.singleCharacter');
                                     let textTotalWidth: number;
-                                    textTotalWidth = $('.singleCharacter').innerWidth();
+                                    textTotalWidth = singleCharacterLocal.innerWidth();
                                     let numberOfCharactersAllowed: number;
                                     numberOfCharactersAllowed = Math.floor(
                                         (Gantt.kpiLabelWidth / totalKPIs) / (textTotalWidth / clippedText.length));
                                     if (clippedText.length > numberOfCharactersAllowed) {
-                                        $('.singleCharacter').text(clippedText
+                                        singleCharacterLocal.text(clippedText
                                             .substring(0, numberOfCharactersAllowed - 2) + ellipsisLiteral);
-                                        textTotalWidth = $('.singleCharacter').innerWidth();
+                                        textTotalWidth = singleCharacterLocal.innerWidth();
                                         let iCount: number = 0;
                                         while (textTotalWidth < width) {
                                             iCount++;
-                                            $('.singleCharacter')
+                                            singleCharacterLocal
                                                 .text(clippedText.substring(0, numberOfCharactersAllowed - 2 + iCount) + ellipsisLiteral);
-                                            textTotalWidth = $('.singleCharacter').innerWidth();
+                                            textTotalWidth = singleCharacterLocal.innerWidth();
                                         }
                                     } else {
                                         iLeftSpacing = Gantt.kpiLabelWidth / totalKPIs - textTotalWidth - 5;
                                     }
-                                    d3.selectAll('.singleCharacter').remove();
+                                    singleCharacterLocal.remove();
                                 }
 
                                 axisKPILabel.attr({
@@ -6303,8 +6344,7 @@ module powerbi.extensibility.visual {
                             continue;
                         }
                         let labelnormalizer: number;
-                        labelnormalizer = (thisObj.viewModel.settings.taskResource.fontSize * Gantt.maximumNormalizedFontSize)
-                            / Gantt.maximumFontSize;
+                        labelnormalizer = thisObj.viewModel.settings.taskResource.fontSize;
                         if (taskResourceShow) {
                             let taskResource: Selection<HTMLElement>;
                             taskResource = taskSelection
@@ -6436,8 +6476,7 @@ module powerbi.extensibility.visual {
                         }
                         thisObj.renderTooltip(eachPhaseSelection);
                         let labelnormalizer: number;
-                        labelnormalizer =
-                            (thisObj.viewModel.settings.taskResource.fontSize * Gantt.maximumNormalizedFontSize) / Gantt.maximumFontSize;
+                        labelnormalizer = thisObj.viewModel.settings.taskResource.fontSize;
                         if (taskResourceShow) {
 
                             let taskResource: Selection<HTMLElement>;
@@ -6524,35 +6563,35 @@ module powerbi.extensibility.visual {
 
                     thisObj.selectionManager.select(d.selectionId, false).then((ids: ISelectionId[]) => {
                         if (ids.length === 0) {
-                            $('.gantt_task-rect').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                            $('.gantt_toggle-task').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                            $('.gantt_kpiClass').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                            $('.gantt_task-resource').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttTaskRect.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttToggleTask.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttKPIClass.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttTaskResouce.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
                             Gantt.isSelected = false;
 
                         } else {
-                            $('.gantt_task-rect').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
-                            $('.gantt_toggle-task').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
-                            $('.gantt_kpiClass').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
-                            $('.gantt_task-resource').removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+                            ganttTaskRect.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+                            ganttToggleTask.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+                            ganttKPIClass.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
+                            ganttTaskResouce.removeClass('gantt_higheropacity').addClass('gantt_loweropacity');
 
                             let sString: string;
                             sString = '';
                             let sStr: string;
                             sStr = '';
-                            if ($('.gantt_task-rect').attr('trancheAttr')) {
+                            if (ganttTaskRect.attr('trancheAttr')) {
                                 sString = 'trancheAttr';
-                            } else if ($('.gantt_task-rect').attr('projectAttr')) {
+                            } else if (ganttTaskRect.attr('projectAttr')) {
                                 sString = 'projectAttr';
-                            } else if ($('.gantt_task-rect').attr('metroAttr')) {
+                            } else if (ganttTaskRect.attr('metroAttr')) {
                                 sString = 'metroAttr';
-                            } else if ($('.gantt_task-rect').attr('regionAttr')) {
+                            } else if (ganttTaskRect.attr('regionAttr')) {
                                 sString = 'regionAttr';
                             }
                             if (sString) {
                                 sStr = $(this).attr(sString);
                             }
-                            $('.gantt_toggle-task').addClass('gantt_loweropacity').removeClass('gantt_higheropacity');
+                            ganttToggleTask.addClass('gantt_loweropacity').removeClass('gantt_higheropacity');
                             $(taskRowClassLiteral + rowNumber).addClass('gantt_higheropacity').removeClass('gantt_loweropacity');
                             Gantt.isSelected = true;
                         }
@@ -6566,7 +6605,7 @@ module powerbi.extensibility.visual {
                     if ($LegendToggleImageId.hasClass('visible')) {
                         $LegendToggleImageId.removeClass('visible').addClass('notVisible');
                         $LegendToggleImageId.attr('href', Gantt.drillDownImage);
-                        $('.gantt_legendIndicatorPanel').hide();
+                        ganttLegendIndicatorPanel.hide();
                         $('.arrow').hide();
                     }
                     (<Event>d3.event).stopPropagation();
@@ -6575,10 +6614,10 @@ module powerbi.extensibility.visual {
                 textsHierarchy = d3.selectAll(dotLiteral + Selectors.toggleTask.class);
                 // tslint:disable-next-line:cyclomatic-complexity no-any
                 textsHierarchy.on('click', function (d: any): void {
-                    $('.gantt_toggle-task').addClass('gantt_loweropacity');
-                    $('.gantt_task-rect').addClass('gantt_loweropacity');
-                    $('.gantt_kpiClass').addClass('gantt_loweropacity');
-                    $('.gantt_task-resource').addClass('gantt_loweropacity');
+                    ganttToggleTask.addClass('gantt_loweropacity');
+                    ganttTaskRect.addClass('gantt_loweropacity');
+                    ganttKPIClass.addClass('gantt_loweropacity');
+                    ganttTaskResouce.addClass('gantt_loweropacity');
 
                     let sString: string;
                     sString = '';
@@ -6625,10 +6664,10 @@ module powerbi.extensibility.visual {
                                         Gantt.selectionIdHash[m] = true;
                                         Gantt.previousSel = null;
                                     }
-                                    $('.gantt_toggle-task').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                                    $('.gantt_task-rect').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                                    $('.gantt_kpiClass').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                                    $('.gantt_task-resource').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                                    ganttToggleTask.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                                    ganttTaskRect.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                                    ganttKPIClass.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                                    ganttTaskResouce.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
                                     Gantt.isSelected = true;
                                 } else {
                                     for (let m: number = 0; m < Gantt.globalOptions.dataViews[0].categorical.categories[0].values.length
@@ -6675,10 +6714,10 @@ module powerbi.extensibility.visual {
                     }
                     thisObj.selectionManager.select(selectedSelID).then((ids: ISelectionId[]) => {
                         if (ids.length === 0) {
-                            $('.gantt_task-rect').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                            $('.gantt_toggle-task').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                            $('.gantt_kpiClass').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                            $('.gantt_task-resource').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttTaskRect.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttToggleTask.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttKPIClass.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                            ganttTaskResouce.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
                             Gantt.isSelected = false;
                         }
                     });
@@ -6687,7 +6726,7 @@ module powerbi.extensibility.visual {
                     if ($LegendToggleImageId.hasClass('visible')) {
                         $LegendToggleImageId.removeClass('visible').addClass('notVisible');
                         $LegendToggleImageId.attr('href', Gantt.drillDownImage);
-                        $('.gantt_legendIndicatorPanel').hide();
+                        ganttLegendIndicatorPanel.hide();
                         $('.arrow').hide();
                     }
                     (<Event>d3.event).stopPropagation();
@@ -6701,10 +6740,10 @@ module powerbi.extensibility.visual {
                         bars.attr({
                             opacity: 1
                         });
-                        $('.gantt_toggle-task').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                        $('.gantt_task-rect').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                        $('.gantt_kpiClass').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
-                        $('.gantt_task-resource').removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                        ganttToggleTask.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                        ganttTaskRect.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                        ganttKPIClass.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
+                        ganttTaskResouce.removeClass('gantt_loweropacity').addClass('gantt_higheropacity');
                         Gantt.isSelected = false;
                     }
                     let $LegendToggleImageId: JQuery;
@@ -6712,7 +6751,7 @@ module powerbi.extensibility.visual {
                     if ($LegendToggleImageId.hasClass('visible')) {
                         $LegendToggleImageId.removeClass('visible').addClass('notVisible');
                         $LegendToggleImageId.attr('href', Gantt.drillDownImage);
-                        $('.gantt_legendIndicatorPanel').hide();
+                        ganttLegendIndicatorPanel.hide();
                         $('.arrow').hide();
                     }
                 });
@@ -6763,7 +6802,7 @@ module powerbi.extensibility.visual {
                 this.backgroundGroupBar.remove();
                 if ($('.taskRect').length > 0) {
                     $('.taskRect').remove();
-                    $('.gantt_barPanel').not(':first').remove();
+                    ganttBarPanel.not(':first').remove();
                 }
                 this.taskDiv = this.bottomDiv
                     .append('div')
@@ -6797,23 +6836,23 @@ module powerbi.extensibility.visual {
                 const opacityNumber2: number = 0.8;
                 const categoryLen: number = Gantt.categorylength;
                 if ((this.viewModel.settings.legend.show
-                    && (this.viewport.width > $('.gantt_legendIndicatorPanel').innerWidth() + 100)
-                    && this.viewport.height > $('.gantt_legendIndicatorPanel').innerHeight() + 50
+                    && (this.viewport.width > ganttLegendIndicatorPanel.innerWidth() + 100)
+                    && this.viewport.height > ganttLegendIndicatorPanel.innerHeight() + 50
                     && this.viewModel.kpiData.length > 0)
                     && (parseFloat(d3.select('.gantt_legendPanel').style('left')) >
                         parseFloat(d3.select('.gantt_barPanel').style('left')))) {
                     $('.gantt_legendPanel').show();
                     if ($('#LegendToggleImage').hasClass('visible')) {
-                        $('.gantt_legendIndicatorPanel').show();
+                        ganttLegendIndicatorPanel.show();
                         $('.arrow').show();
                     } else {
-                        $('.gantt_legendIndicatorPanel').hide();
+                        ganttLegendIndicatorPanel.hide();
                         $('.arrow').hide();
                     }
                 } else {
                     $('.arrow').hide();
                     $('.gantt_legendPanel').hide();
-                    $('.gantt_legendIndicatorPanel').hide();
+                    ganttLegendIndicatorPanel.hide();
                 }
                 const textElement: Selection<HTMLElement> = this.drillAllGroup.append('text')
                     .attr('class', categoryLiteral + spaceLiteral + taskColumnLiteral)
@@ -6822,8 +6861,7 @@ module powerbi.extensibility.visual {
                 d3.select(categoryClassLiteral)
                     .text('Category hierarchy')
                     .style({
-                        'font-size': (columnHeaderFontSize * Gantt.maximumNormalizedFontSize)
-                            / Gantt.maximumFontSize + pxLiteral,
+                        'font-size': columnHeaderFontSize + pxLiteral,
                         'font-family': columnHeaderFontFamily,
                         fill: columnHeaderColor,
                         'background-color': columnHeaderBgColor
@@ -6836,7 +6874,7 @@ module powerbi.extensibility.visual {
                     axisKPILabel1.attr({
                         x: 3 + (Gantt.kpiLabelWidth / totalKPIs * jCount),
                         y: 15,
-                        'font-size': (columnHeaderFontSize * Gantt.maximumNormalizedFontSize) / Gantt.maximumFontSize + pxLiteral,
+                        'font-size': columnHeaderFontSize + pxLiteral,
                         'font-family': columnHeaderFontFamily,
                         fill: columnHeaderColor,
                         background: columnHeaderBgColor,
@@ -6892,6 +6930,9 @@ module powerbi.extensibility.visual {
                         });
                     }
                 }
+                const taskRectShow: Selection<HTMLElement> = d3.selectAll('.taskRect.show');
+                const ganttTaskPanelShow: Selection<HTMLElement> = d3.selectAll('.gantt_taskPanel .show');
+                const ganttKpiPanel: Selection<HTMLElement> = d3.selectAll('.gantt_kpiPanel');
                 // tslint:disable-next-line:no-any
                 let yVal: number = -1;
                 for (let tasknumber: number = 0; tasknumber < tasks.length; tasknumber++) {
@@ -7021,15 +7062,15 @@ module powerbi.extensibility.visual {
                                 if (selectionIdLen1 !== 0) {
                                     thisObj.selectionManager.clear();
                                     Gantt.lastSelectedbar = null;
-                                    d3.selectAll('.taskRect.show').classed('selected', false);
-                                    d3.selectAll('.taskRect.show').style({
+                                    taskRectShow.classed('selected', false);
+                                    taskRectShow.style({
                                         opacity: 1
                                     });
-                                    d3.selectAll('.gantt_taskPanel .show').style({
+                                    ganttTaskPanelShow.style({
                                         opacity: 1
                                     });
                                     for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex]).css({ opacity: 1 });
+                                        $($(ganttKpiPanel[0][0]).children()[kpiindex]).css({ opacity: 1 });
                                     }
                                 }
                                 // tslint:disable-next-line:no-any
@@ -7130,11 +7171,11 @@ module powerbi.extensibility.visual {
                                             Gantt.lastSelectedbar = parseInt($($(this).parent()[0]).attr('data-rowid'), 10);
                                             thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                 if ($(this).parent().attr('data-isleaf') === 'true') {
-                                                    d3.selectAll('.taskRect.show').classed('selected', false);
-                                                    d3.selectAll('.taskRect.show').style({
+                                                    taskRectShow.classed('selected', false);
+                                                    taskRectShow.style({
                                                         opacity: 0.3
                                                     });
-                                                    d3.selectAll('.gantt_taskPanel .show').style({
+                                                    ganttTaskPanelShow.style({
                                                         opacity: 0.3
                                                     });
                                                     d3.select($(this).parent()[0])
@@ -7144,19 +7185,19 @@ module powerbi.extensibility.visual {
                                                         });
                                                     for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
                                                         // tslint:disable-next-line:max-line-length
-                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
+                                                        $($(ganttKpiPanel[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
                                                     }
                                                     // tslint:disable-next-line:no-shadowed-variable
                                                     for (let i: number = 0; i < tasks.length; i++) {
-                                                        if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                        if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                             selobjchildrencncierarchy[j].rowId) {
                                                             // tslint:disable-next-line:typedef
-                                                            const thisk = $($(d3.selectAll('.taskRect.show')[0][i])).css('opacity', '1');
+                                                            const thisk = $($(taskRectShow[0][i])).css('opacity', '1');
                                                             thisk.addClass('selected');
                                                             // tslint:disable-next-line:typedef
-                                                            const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                            const thiskk = $(ganttTaskPanelShow);
                                                             $(thiskk[0][i]).css('opacity', '1');
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i]).css({ opacity: 1 });
+                                                            $($(ganttKpiPanel[0][0]).children()[i]).css({ opacity: 1 });
                                                             j++;
                                                         }
                                                         if (j === selobjchildrencncierarchy.length) {
@@ -7165,29 +7206,29 @@ module powerbi.extensibility.visual {
                                                     }
                                                 } else {
                                                     let selobjindex: number = 0;
-                                                    d3.selectAll('.taskRect.show').style({
+                                                    taskRectShow.style({
                                                         opacity: 0.3
                                                     })
-                                                        .classed('selected', false);
-                                                    d3.selectAll('.gantt_taskPanel .show').style({
+                                                    .classed('selected', false);
+                                                    ganttTaskPanelShow.style({
                                                         opacity: 0.3
                                                     });
                                                     for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                        $($(ganttKpiPanel[0][0])
                                                             .children()[kpiindex])
                                                             .css({ opacity: 0.3 });
                                                     }
                                                     // tslint:disable-next-line:no-shadowed-variable
                                                     for (let i: number = 0; i < tasks.length; i++) {
-                                                        if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                        if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                             selobjchildrencncierarchy[selobjindex].rowId) {
                                                             // tslint:disable-next-line:typedef
-                                                            const thisk = $(d3.selectAll('.taskRect.show'));
+                                                            const thisk = $(taskRectShow);
                                                             $(thisk[0][i]).css({ opacity: 1 });
                                                             // tslint:disable-next-line:typedef
-                                                            const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                            const thiskk = $(ganttTaskPanelShow);
                                                             $(thiskk[0][i]).css({ opacity: 1 });
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i]).css({ opacity: 1 });
+                                                            $($(ganttKpiPanel[0][0]).children()[i]).css({ opacity: 1 });
                                                             selobjindex++;
                                                         }
                                                         if (selobjindex === selobjchildrencncierarchy.length) {
@@ -7199,15 +7240,15 @@ module powerbi.extensibility.visual {
                                         } else if (Gantt.lastSelectedbar ===
                                             parseInt($($(d3.select($(this).parent()[0]))[0]).attr('data-rowid'), 10)) {
                                             thisObj.selectionManager.clear();
-                                            d3.selectAll('.taskRect.show').classed('selected', false);
-                                            d3.selectAll('.taskRect.show').style({
+                                            taskRectShow.classed('selected', false);
+                                            taskRectShow.style({
                                                 opacity: 1
                                             });
-                                            d3.selectAll('.gantt_taskPanel .show').style({
+                                            ganttTaskPanelShow.style({
                                                 opacity: 0.8
                                             });
                                             for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex]).css({ opacity: 0.8 });
+                                                $($(ganttKpiPanel[0][0]).children()[kpiindex]).css({ opacity: 0.8 });
                                             }
                                             Gantt.lastSelectedbar = null;
                                         } else {
@@ -7215,18 +7256,18 @@ module powerbi.extensibility.visual {
                                             Gantt.lastSelectedbar = parseInt($($(d3.select($(this).parent()[0]))[0]).attr('data-rowid'), 10);
                                             thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                 if ($(this).parent().attr('data-isleaf').toString() === 'true') {
-                                                    d3.selectAll('.taskRect.show').classed('selected', false);
-                                                    d3.selectAll('.gantt_taskPanel .show').style({
+                                                    taskRectShow.classed('selected', false);
+                                                    ganttTaskPanelShow.style({
                                                         opacity: 0.3
                                                     })
-                                                        .classed('selected', false);
-                                                    d3.selectAll('.taskRect.show').style({
+                                                    .classed('selected', false);
+                                                    taskRectShow.style({
                                                         opacity: 0.3
                                                     })
-                                                        .classed('selected', false);
+                                                    .classed('selected', false);
                                                     for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
                                                         // tslint:disable-next-line:max-line-length
-                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
+                                                        $($(ganttKpiPanel[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
                                                     }
                                                     d3.select($(this).parent()[0]).style({
                                                         opacity: 1
@@ -7235,15 +7276,15 @@ module powerbi.extensibility.visual {
                                                     // tslint:disable-next-line:no-shadowed-variable
                                                     for (let i: number = 0; i < tasks.length; i++) {
                                                         // tslint:disable-next-line:max-line-length
-                                                        if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                        if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                             selobjchildrencncierarchy[j].rowId) {
                                                             // tslint:disable-next-line:typedef
-                                                            const thisk = $($(d3.selectAll('.taskRect.show')[0][i])).css('opacity', '1');
+                                                            const thisk = $($(taskRectShow[0][i])).css('opacity', '1');
                                                             thisk.addClass('selected');
                                                             // tslint:disable-next-line:typedef
-                                                            const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                            const thiskk = $(ganttTaskPanelShow);
                                                             $(thiskk[0][i]).css('opacity', '1');
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i]).css({ opacity: 1 });
+                                                            $($(ganttKpiPanel[0][0]).children()[i]).css({ opacity: 1 });
                                                             j++;
                                                         }
                                                         if (j === selobjchildrencncierarchy.length) {
@@ -7252,28 +7293,28 @@ module powerbi.extensibility.visual {
                                                     }
                                                 } else {
                                                     let selobjindex: number = 0;
-                                                    d3.selectAll('.taskRect.show').style({
+                                                    taskRectShow.style({
                                                         opacity: 0.3
                                                     })
-                                                        .classed('selected', false);
-                                                    d3.selectAll('.gantt_taskPanel .show').style({
+                                                    .classed('selected', false);
+                                                    ganttTaskPanelShow.style({
                                                         opacity: 0.3
                                                     });
                                                     for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex])
+                                                        $($(ganttKpiPanel[0][0]).children()[kpiindex])
                                                             .css({ opacity: 0.3 });
                                                     }
                                                     // tslint:disable-next-line:no-shadowed-variable
                                                     for (let i: number = 0; i < tasks.length; i++) {
                                                         // tslint:disable-next-line:max-line-length
-                                                        if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                        if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                             selobjchildrencncierarchy[selobjindex].rowId) {
                                                             // tslint:disable-next-line:typedef
-                                                            const thisk = $($(d3.selectAll('.taskRect.show')[0][i])).css('opacity', '1');
+                                                            const thisk = $($(taskRectShow[0][i])).css('opacity', '1');
                                                             thisk.addClass('selected');
                                                             // tslint:disable-next-line:typedef
-                                                            const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i]).css({ opacity: 1 });
+                                                            const thiskk = $(ganttTaskPanelShow);
+                                                            $($(ganttKpiPanel[0][0]).children()[i]).css({ opacity: 1 });
                                                             $(thiskk[0][i]).css('opacity', '1');
                                                             selobjindex++;
                                                         }
@@ -7526,26 +7567,28 @@ module powerbi.extensibility.visual {
                                                     'font-size': normalizer + pxLiteral,
                                                     'font-family': taskLabelsFontFamily
                                                 });
+                                            // tslint:disable-next-line:no-any
+                                            const singleCharacterLocal: any = $('.singleCharacter');
                                             let textTotalWidth: number;
-                                            textTotalWidth = $('.singleCharacter').innerWidth();
+                                            textTotalWidth = singleCharacterLocal.innerWidth();
                                             let numberOfCharactersAllowed: number;
                                             numberOfCharactersAllowed = Math.floor(
                                                 (Gantt.kpiLabelWidth / totalKPIs) / (textTotalWidth / clippedText.length));
                                             if (clippedText.length > numberOfCharactersAllowed) {
-                                                $('.singleCharacter').text(clippedText
+                                                singleCharacterLocal.text(clippedText
                                                     .substring(0, numberOfCharactersAllowed - 2) + ellipsisLiteral);
-                                                textTotalWidth = $('.singleCharacter').innerWidth();
+                                                textTotalWidth = singleCharacterLocal.innerWidth();
                                                 let iCount: number = 0;
                                                 while (textTotalWidth < width) {
                                                     iCount++;
                                                     // tslint:disable-next-line:max-line-length
-                                                    $('.singleCharacter').text(clippedText.substring(0, numberOfCharactersAllowed - 2 + iCount) + ellipsisLiteral);
-                                                    textTotalWidth = $('.singleCharacter').innerWidth();
+                                                    singleCharacterLocal.text(clippedText.substring(0, numberOfCharactersAllowed - 2 + iCount) + ellipsisLiteral);
+                                                    textTotalWidth = singleCharacterLocal.innerWidth();
                                                 }
                                             } else {
                                                 iLeftSpacing = Gantt.kpiLabelWidth / totalKPIs - textTotalWidth - 5;
                                             }
-                                            d3.selectAll('.singleCharacter').remove();
+                                            singleCharacterLocal.remove();
                                         }
                                         axisKPILabel.attr({
                                             'margin-top': thisObj.getTaskLabelCoordinateY(tasknumber) + pxLiteral,
@@ -7716,15 +7759,15 @@ module powerbi.extensibility.visual {
                                                         thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                             if ($(this).attr('data-isleaf').toString() === 'true') {
                                                                 let j: number = 0;
-                                                                d3.selectAll('.taskRect.show').classed('selected', false);
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.classed('selected', false);
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 });
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                                    $($(ganttKpiPanel[0][0])
                                                                         .children()[kpiindex]).css({ opacity: 0.3 });
                                                                 }
                                                                 d3.select(this)
@@ -7735,16 +7778,16 @@ module powerbi.extensibility.visual {
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line:max-line-length
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                                         selobjchildrencncierarchy[j].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                        const thiskk = $(ganttTaskPanelShow);
                                                                         $(thiskk[0][i]).css('opacity', '1');
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                        $($(ganttKpiPanel[0][0]).children()[i])
                                                                             .css({ opacity: 1 });
                                                                         j++;
                                                                     }
@@ -7754,30 +7797,30 @@ module powerbi.extensibility.visual {
                                                                 }
                                                             } else {
                                                                 let j: number = 0;
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 })
-                                                                    .classed('selected', false);
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                .classed('selected', false);
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                                    $($(ganttKpiPanel[0][0])
                                                                         .children()[kpiindex]).css({ opacity: 0.3 });
                                                                 }
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line: max-line-length
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                        const thiskk = $(ganttTaskPanelShow);
                                                                         $(thiskk[0][i]).css('opacity', '1')
                                                                             .addClass('selected');
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                                        $($(ganttKpiPanel[0][0])
                                                                             .children()[i]).css({ opacity: 1 });
                                                                         j++;
                                                                     }
@@ -7789,15 +7832,15 @@ module powerbi.extensibility.visual {
                                                         });
                                                     } else if (Gantt.lastSelectedbar === parseInt(d3.select(this).attr('data-rowid'), 10)) {
                                                         thisObj.selectionManager.clear();
-                                                        d3.selectAll('.taskRect.show').classed('selected', false);
-                                                        d3.selectAll('.taskRect.show').style({
+                                                        taskRectShow.classed('selected', false);
+                                                        taskRectShow.style({
                                                             opacity: 1
                                                         });
-                                                        d3.selectAll('.gantt_taskPanel .show').style({
+                                                        ganttTaskPanelShow.style({
                                                             opacity: 1
                                                         });
                                                         for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                            $($(ganttKpiPanel[0][0])
                                                                 .children()[kpiindex]).css({ opacity: 1 });
                                                         }
                                                         Gantt.lastSelectedbar = null;
@@ -7806,15 +7849,15 @@ module powerbi.extensibility.visual {
                                                         let j: number = 0;
                                                         thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                             if ($(this).attr('data-isleaf').toString() === 'true') {
-                                                                d3.selectAll('.taskRect.show').classed('selected', false);
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.classed('selected', false);
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 });
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                                    $($(ganttKpiPanel[0][0])
                                                                         .children()[kpiindex]).css({ opacity: 0.3 });
                                                                 }
                                                                 d3.select(this)
@@ -7825,16 +7868,16 @@ module powerbi.extensibility.visual {
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line:max-line-length
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                                         selobjchildrencncierarchy[j].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                        const thiskk = $(ganttTaskPanelShow);
                                                                         $(thiskk[0][i]).css('opacity', '1');
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                        $($(ganttKpiPanel[0][0]).children()[i])
                                                                             .css({ opacity: 1 });
                                                                         j++;
                                                                     }
@@ -7844,28 +7887,28 @@ module powerbi.extensibility.visual {
                                                                 }
                                                             } else {
                                                                 let selobjindex: number = 0;
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 })
-                                                                    .classed('selected', false);
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                .classed('selected', false);
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                                    $($(ganttKpiPanel[0][0])
                                                                         .children()[kpiindex]).css({ opacity: 0.3 });
                                                                 }
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[selobjindex].rowId) {
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[selobjindex].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                        const thiskk = $(ganttTaskPanelShow);
+                                                                        $($(ganttKpiPanel[0][0]).children()[i])
                                                                             .css({ opacity: 1 });
                                                                         $(thiskk[0][i]).css('opacity', '1');
                                                                         selobjindex++;
@@ -7923,15 +7966,15 @@ module powerbi.extensibility.visual {
                                                         thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                             if ($(this).attr('data-isleaf').toString() === 'true') {
                                                                 let j: number = 0;
-                                                                d3.selectAll('.taskRect.show').classed('selected', false);
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.classed('selected', false);
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 });
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                                    $($(ganttKpiPanel[0][0])
                                                                         .children()[kpiindex]).css({ opacity: 0.3 });
                                                                 }
                                                                 d3.select(this)
@@ -7942,15 +7985,15 @@ module powerbi.extensibility.visual {
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line: max-line-length
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                        const thiskk = $(ganttTaskPanelShow);
                                                                         $(thiskk[0][i]).css('opacity', '1');
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                        $($(ganttKpiPanel[0][0]).children()[i])
                                                                             .css({ opacity: 1 });
                                                                         j++;
                                                                     }
@@ -7960,30 +8003,30 @@ module powerbi.extensibility.visual {
                                                                 }
                                                             } else {
                                                                 let j: number = 0;
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 })
                                                                     .classed('selected', false);
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex])
+                                                                    $($(ganttKpiPanel[0][0]).children()[kpiindex])
                                                                         .css({ opacity: 0.3 });
                                                                 }
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line: max-line-length
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                        const thiskk = $(ganttTaskPanelShow);
                                                                         $(thiskk[0][i]).css('opacity', '1')
                                                                             .addClass('selected');
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                        $($(ganttKpiPanel[0][0]).children()[i])
                                                                             .css({ opacity: 1 });
                                                                         j++;
                                                                     }
@@ -7996,15 +8039,15 @@ module powerbi.extensibility.visual {
                                                         });
                                                     } else if (Gantt.lastSelectedbar === parseInt(d3.select(this).attr('data-rowid'), 10)) {
                                                         thisObj.selectionManager.clear();
-                                                        d3.selectAll('.taskRect.show').classed('selected', false);
-                                                        d3.selectAll('.taskRect.show').style({
+                                                        taskRectShow.classed('selected', false);
+                                                        taskRectShow.style({
                                                             opacity: 1
                                                         });
-                                                        d3.selectAll('.gantt_taskPanel .show').style({
+                                                        ganttTaskPanelShow.style({
                                                             opacity: 1
                                                         });
                                                         for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex])
+                                                            $($(ganttKpiPanel[0][0]).children()[kpiindex])
                                                                 .css({ opacity: 1 });
                                                         }
                                                         Gantt.lastSelectedbar = null;
@@ -8013,15 +8056,15 @@ module powerbi.extensibility.visual {
                                                         let j: number = 0;
                                                         thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                             if ($(this).attr('data-isleaf').toString() === 'true') {
-                                                                d3.selectAll('.taskRect.show').classed('selected', false);
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.classed('selected', false);
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 });
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                                    $($(ganttKpiPanel[0][0])
                                                                         .children()[kpiindex]).css({ opacity: 0.3 });
                                                                 }
                                                                 d3.select(this)
@@ -8032,15 +8075,15 @@ module powerbi.extensibility.visual {
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line: max-line-length
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                        const thiskk = $(ganttTaskPanelShow);
                                                                         $(thiskk[0][i]).css('opacity', '1');
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                        $($(ganttKpiPanel[0][0]).children()[i])
                                                                             .css({ opacity: 1 });
                                                                         j++;
                                                                     }
@@ -8050,28 +8093,28 @@ module powerbi.extensibility.visual {
                                                                 }
                                                             } else {
                                                                 let selobjindex: number = 0;
-                                                                d3.selectAll('.taskRect.show').style({
+                                                                taskRectShow.style({
                                                                     opacity: 0.3
                                                                 })
-                                                                    .classed('selected', false);
-                                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                                .classed('selected', false);
+                                                                ganttTaskPanelShow.style({
                                                                     opacity: 0.3
                                                                 });
                                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex])
+                                                                    $($(ganttKpiPanel[0][0]).children()[kpiindex])
                                                                         .css({ opacity: 0.3 });
                                                                 }
                                                                 // tslint:disable-next-line:no-shadowed-variable
                                                                 for (let i: number = 0; i < tasks.length; i++) {
                                                                     // tslint:disable-next-line:max-line-length
-                                                                    if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[selobjindex].rowId) {
+                                                                    if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) === selobjchildrencncierarchy[selobjindex].rowId) {
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                        const thisk = $($(taskRectShow[0][i]))
                                                                             .css('opacity', '1');
                                                                         thisk.addClass('selected');
                                                                         // tslint:disable-next-line:typedef
-                                                                        const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
-                                                                        $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                        const thiskk = $(ganttTaskPanelShow);
+                                                                        $($(ganttKpiPanel[0][0]).children()[i])
                                                                             .css({ opacity: 1 });
                                                                         $(thiskk[0][i]).css('opacity', '1');
                                                                         selobjindex++;
@@ -8105,9 +8148,7 @@ module powerbi.extensibility.visual {
                                 }
                                 thisObj.renderTooltip(taskRect);
                                 let labelnormalizer: number;
-                                labelnormalizer =
-                                    (thisObj.viewModel.settings.taskResource.fontSize * Gantt.maximumNormalizedFontSize)
-                                    / Gantt.maximumFontSize;
+                                labelnormalizer = thisObj.viewModel.settings.taskResource.fontSize;
                                 if (taskResourceShow) {
                                     // tslint:disable-next-line:no-any
                                     let taskResource: any;
@@ -8311,11 +8352,11 @@ module powerbi.extensibility.visual {
                                                 thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                     if ($(this).attr('data-isleaf').toString() === 'true') {
                                                         let j: number = 0;
-                                                        d3.selectAll('.taskRect.show').classed('selected', false);
-                                                        d3.selectAll('.taskRect.show').style({
+                                                        taskRectShow.classed('selected', false);
+                                                        taskRectShow.style({
                                                             opacity: 0.3
                                                         });
-                                                        d3.selectAll('.gantt_taskPanel .show').style({
+                                                        ganttTaskPanelShow.style({
                                                             opacity: 0.3
                                                         });
                                                         d3.select(this)
@@ -8324,18 +8365,18 @@ module powerbi.extensibility.visual {
                                                                 opacity: 1
                                                             });
                                                         for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0])
+                                                            $($(ganttKpiPanel[0][0])
                                                                 .children()[kpiindex]).css({ opacity: 0.3 });
                                                         }
                                                         // tslint:disable-next-line:max-line-length
                                                         for (let indexselctedobj: number = 0; indexselctedobj < tasks.length; indexselctedobj++) {
                                                             // tslint:disable-next-line:max-line-length
-                                                            if (parseInt($(d3.selectAll('.taskRect.show')[0][indexselctedobj]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
+                                                            if (parseInt($(taskRectShow[0][indexselctedobj]).attr('data-rowid'), 10) === selobjchildrencncierarchy[j].rowId) {
                                                                 // tslint:disable-next-line:typedef
-                                                                const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                const thiskk = $(ganttTaskPanelShow);
                                                                 $(thiskk[0][indexselctedobj]).css('opacity', '1')
                                                                     .addClass('selected');
-                                                                $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                $($(ganttKpiPanel[0][0]).children()[i])
                                                                     .css({ opacity: 1 });
                                                                 j++;
                                                             }
@@ -8345,31 +8386,31 @@ module powerbi.extensibility.visual {
                                                         }
                                                     } else {
                                                         let j: number = 0;
-                                                        d3.selectAll('.taskRect.show').style({
+                                                        taskRectShow.style({
                                                             opacity: 0.3
                                                         })
-                                                            .classed('selected', false);
-                                                        d3.selectAll('.gantt_taskPanel .show').style({
+                                                        .classed('selected', false);
+                                                        ganttTaskPanelShow.style({
                                                             opacity: 0.3
                                                         });
                                                         for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
                                                             // tslint:disable-next-line:max-line-length
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
+                                                            $($(ganttKpiPanel[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
                                                         }
                                                         // tslint:disable-next-line:no-shadowed-variable
                                                         for (let i: number = 0; i < tasks.length; i++) {
                                                             // tslint:disable-next-line:max-line-length
-                                                            if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                            if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                                 selobjchildrencncierarchy[j].rowId) {
                                                                 // tslint:disable-next-line:typedef
-                                                                const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                const thisk = $($(taskRectShow[0][i]))
                                                                     .css('opacity', '1');
                                                                 thisk.addClass('selected');
                                                                 // tslint:disable-next-line:typedef
-                                                                const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                const thiskk = $(ganttTaskPanelShow);
                                                                 $(thiskk[0][i]).css('opacity', '1')
                                                                     .addClass('selected');
-                                                                $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                $($(ganttKpiPanel[0][0]).children()[i])
                                                                     .css({ opacity: 1 });
                                                                 j++;
                                                             }
@@ -8381,15 +8422,15 @@ module powerbi.extensibility.visual {
                                                 });
                                             } else if (Gantt.lastSelectedbar === parseInt(d3.select(this).attr('data-rowid'), 10)) {
                                                 thisObj.selectionManager.clear();
-                                                d3.selectAll('.taskRect.show').classed('selected', false);
-                                                d3.selectAll('.taskRect.show').style({
+                                                taskRectShow.classed('selected', false);
+                                                taskRectShow.style({
                                                     opacity: 1
                                                 });
-                                                d3.selectAll('.gantt_taskPanel .show').style({
+                                                ganttTaskPanelShow.style({
                                                     opacity: 0.8
                                                 });
                                                 for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                    $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex]).css({ opacity: 0.8 });
+                                                    $($(ganttKpiPanel[0][0]).children()[kpiindex]).css({ opacity: 0.8 });
                                                 }
                                                 Gantt.lastSelectedbar = null;
                                             } else {
@@ -8397,11 +8438,11 @@ module powerbi.extensibility.visual {
                                                 thisObj.selectionManager.select(selectionId).then((ids: ISelectionId[]) => {
                                                     if ($(this).attr('data-isleaf').toString() === 'true') {
                                                         let j: number = 0;
-                                                        d3.selectAll('.taskRect.show').classed('selected', false);
-                                                        d3.selectAll('.taskRect.show').style({
+                                                        taskRectShow.classed('selected', false);
+                                                        taskRectShow.style({
                                                             opacity: 0.3
                                                         });
-                                                        d3.selectAll('.gantt_taskPanel .show').style({
+                                                        ganttTaskPanelShow.style({
                                                             opacity: 0.3
                                                         });
                                                         d3.select(this)
@@ -8411,21 +8452,21 @@ module powerbi.extensibility.visual {
                                                             });
                                                         for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
                                                             // tslint:disable-next-line:max-line-length
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
+                                                            $($(ganttKpiPanel[0][0]).children()[kpiindex]).css({ opacity: 0.3 });
                                                         }
                                                         // tslint:disable-next-line:no-shadowed-variable
                                                         for (let i: number = 0; i < tasks.length; i++) {
                                                             // tslint:disable-next-line:max-line-length
-                                                            if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                            if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                                 selobjchildrencncierarchy[j].rowId) {
                                                                 // tslint:disable-next-line:typedef
-                                                                const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                const thisk = $($(taskRectShow[0][i]))
                                                                     .css('opacity', '1');
                                                                 thisk.addClass('selected');
                                                                 // tslint:disable-next-line:typedef
-                                                                const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                const thiskk = $(ganttTaskPanelShow);
                                                                 $(thiskk[0][i]).css('opacity', '1');
-                                                                $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                $($(ganttKpiPanel[0][0]).children()[i])
                                                                     .css({ opacity: 1 });
                                                                 j++;
                                                             }
@@ -8435,31 +8476,31 @@ module powerbi.extensibility.visual {
                                                         }
                                                     } else {
                                                         let j: number = 0;
-                                                        d3.selectAll('.taskRect.show').style({
+                                                        taskRectShow.style({
                                                             opacity: 0.3
                                                         })
-                                                            .classed('selected', false);
-                                                        d3.selectAll('.gantt_taskPanel .show').style({
+                                                        .classed('selected', false);
+                                                        ganttTaskPanelShow.style({
                                                             opacity: 0.3
                                                         });
                                                         for (let kpiindex: number = 0; kpiindex < tasks.length; kpiindex++) {
-                                                            $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[kpiindex])
+                                                            $($(ganttKpiPanel[0][0]).children()[kpiindex])
                                                                 .css({ opacity: 0.3 });
                                                         }
                                                         // tslint:disable-next-line:no-shadowed-variable
                                                         for (let i: number = 0; i < tasks.length; i++) {
                                                             // tslint:disable-next-line:max-line-length
-                                                            if (parseInt($(d3.selectAll('.taskRect.show')[0][i]).attr('data-rowid'), 10) ===
+                                                            if (parseInt($(taskRectShow[0][i]).attr('data-rowid'), 10) ===
                                                                 selobjchildrencncierarchy[j].rowId) {
                                                                 j++;
                                                                 // tslint:disable-next-line:typedef
-                                                                const thisk = $($(d3.selectAll('.taskRect.show')[0][i]))
+                                                                const thisk = $($(taskRectShow[0][i]))
                                                                     .css('opacity', '1');
                                                                 thisk.addClass('selected');
                                                                 // tslint:disable-next-line:typedef
-                                                                const thiskk = $(d3.selectAll('.gantt_taskPanel .show'));
+                                                                const thiskk = $(ganttTaskPanelShow);
                                                                 $(thiskk[0][i]).css('opacity', '1');
-                                                                $($(d3.selectAll('.gantt_kpiPanel')[0][0]).children()[i])
+                                                                $($(ganttKpiPanel[0][0]).children()[i])
                                                                     .css({ opacity: 1 });
                                                             }
                                                             if (j === selobjchildrencncierarchy.length) {
@@ -8489,9 +8530,7 @@ module powerbi.extensibility.visual {
                             }
                             thisObj.renderTooltip(taskRect);
                             let labelnormalizer: number;
-                            labelnormalizer =
-                                (thisObj.viewModel.settings.taskResource.fontSize *
-                                    Gantt.maximumNormalizedFontSize) / Gantt.maximumFontSize;
+                            labelnormalizer = thisObj.viewModel.settings.taskResource.fontSize;
                             if (taskResourceShow) {
                                 // tslint:disable-next-line:no-any
                                 let taskResource: any;
@@ -8565,7 +8604,7 @@ module powerbi.extensibility.visual {
                         if (tasks[tasknumber].expanded) {
                             expandeditems.push(tasks[tasknumber].id);
                         }
-                        $('.gantt_legendIndicatorPanel').hide();
+                        ganttLegendIndicatorPanel.hide();
                         $('.arrow').hide();
                     }
                     for (let jiterator: number = 0; jiterator < expandeditems.length; jiterator++) {
@@ -8579,26 +8618,26 @@ module powerbi.extensibility.visual {
                 }).length;
                 chartHeight = chartHeight / 2;
                 if (!Gantt.isDateData) {
-                    $('.gantt_barPanel').css('height', (chartHeight * 24) + pxLiteral);
+                    ganttBarPanel.css('height', (chartHeight * 24) + pxLiteral);
                 } else {
-                    $('.gantt_barPanel').css('height', (chartHeight * 16) + pxLiteral);
+                    ganttBarPanel.css('height', (chartHeight * 16) + pxLiteral);
                 }
                 if (this.viewModel.settings.taskLabels.isExpanded) {
                     $('.gantt_taskPanel').show();
                 } else {
                     $('.gantt_taskPanel').hide();
                 }
-                if (d3.select('#gantt_ToggleIcon').classed('expand')) {
+                if (toggleIconId.classed('expand')) {
                     $('.gantt_taskPanel').hide();
-                    $('.gantt_bottomTaskDiv').hide();
+                    ganttBottomTaskDiv.hide();
                 } else {
                     $('.gantt_taskPanel').show();
-                    $('.gantt_bottomTaskDiv').show();
+                    ganttBottomTaskDiv.show();
                 }
-                if (d3.select('#gantt_KPIToggle').classed('expand')) {
-                    $('.gantt_kpiPanel').hide();
+                if (ganttKPIToggle.classed('expand')) {
+                    ganttKpiPanelJQuery.hide();
                 } else {
-                    $('.gantt_kpiPanel').show();
+                    ganttKpiPanelJQuery.show();
                 }
             }
         }
@@ -9159,7 +9198,7 @@ module powerbi.extensibility.visual {
                 properties: {
                     show: taskLabelsSettings.show,
                     fill: taskLabelsSettings.fill,
-                    fontSize: taskLabelsSettings.fontSize,
+                    fontSize: taskLabelsSettings.fontSize > 20 ? 20 : taskLabelsSettings.fontSize,
                     fontFamily: taskLabelsSettings.fontFamily,
                     isExpanded: taskLabelsSettings.isExpanded,
                     isHierarchy: taskLabelsSettings.isHierarchy
@@ -9169,7 +9208,7 @@ module powerbi.extensibility.visual {
             instances[0].properties = {
                 show: taskLabelsSettings.show,
                 fill: taskLabelsSettings.fill,
-                fontSize: taskLabelsSettings.fontSize,
+                fontSize: taskLabelsSettings.fontSize > 20 ? 20 : taskLabelsSettings.fontSize,
                 fontFamily: taskLabelsSettings.fontFamily,
                 isExpanded: taskLabelsSettings.isExpanded,
                 isHierarchy: taskLabelsSettings.isHierarchy
@@ -9190,7 +9229,7 @@ module powerbi.extensibility.visual {
                     fill2: columnHeaderSettings.fill2,
                     columnOutline: columnHeaderSettings.columnOutline,
                     fontFamily: columnHeaderSettings.fontFamily,
-                    fontSize: columnHeaderSettings.fontSize
+                    fontSize: columnHeaderSettings.fontSize > 20 ? 20 : columnHeaderSettings.fontSize
                 }
             }];
 
@@ -9207,7 +9246,7 @@ module powerbi.extensibility.visual {
                     show: taskResourceSettings.show,
                     position: taskResourceSettings.position,
                     fill: taskResourceSettings.fill,
-                    fontSize: taskResourceSettings.fontSize,
+                    fontSize: taskResourceSettings.fontSize > 20 ? 20 : taskResourceSettings.fontSize,
                     fontFamily: taskResourceSettings.fontFamily
                 }
             }];
