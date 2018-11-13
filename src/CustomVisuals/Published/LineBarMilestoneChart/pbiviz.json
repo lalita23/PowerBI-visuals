@@ -1,0 +1,37 @@
+{
+  "visual": {
+    "name": "ComboChartWithMilestonesByMAQSoftware",
+    "displayName": "Combo Chart With Milestones By MAQ Software",
+    "guid": "comboChartWithMilestones406DB93C13C94724B65458578706FC21",
+    "visualClassName": "ComboChartWithMilestones",
+    "version": "3.0.0",
+    "description": "This visual allows users to add multiple lines over stacked bar chart. Ability to show milestones and today's line enables users to visually track progress against time. Various formatting options are provided to allow users to customize the visual as per the requirements.",
+    "supportUrl": "https://github.com/maqsoftware/PowerBI-visuals/issues",
+    "gitHubUrl": "https://github.com/maqsoftware/PowerBI-visuals"
+  },
+  "apiVersion": "1.13.0",
+  "author": {
+    "name": "MAQ Software",
+    "email": "support@maqsoftware.com"
+  },
+  "assets": {
+    "icon": "assets/icon.png"
+  },
+  "externalJS": [
+    "node_modules/jquery/dist/jquery.js",
+    "node_modules/d3/d3.js",
+    "node_modules/globalize/lib/globalize.js",
+    "node_modules/globalize/lib/cultures/globalize.culture.en-US.js",
+    "node_modules/powerbi-visuals-utils-typeutils/lib/index.js",
+    "node_modules/powerbi-visuals-utils-svgutils/lib/index.js",
+    "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.js",
+    "node_modules/powerbi-visuals-utils-formattingutils/lib/index.js",
+    "node_modules/powerbi-visuals-utils-interactivityutils/lib/index.js",
+    "node_modules/powerbi-visuals-utils-chartutils/lib/index.js",
+    "node_modules/powerbi-visuals-utils-tooltiputils/lib/index.js"
+  ],
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "dependencies": "dependencies.json",
+  "stringResources": []
+}

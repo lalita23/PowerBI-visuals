@@ -1,0 +1,1481 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Category",
+            "name": "Category",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Legend ",
+            "name": "Legend",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Line values",
+            "name": "Line",
+            "kind": "Measure",
+            "requiredTypes":[
+                {
+                    "numeric": true
+                }
+            ]
+        },
+        {
+            "displayName": "Bar values",
+            "name": "Bar",
+            "kind": "Measure",
+            "requiredTypes":[
+                {
+                    "numeric": true
+                }
+            ]
+        },
+        {
+            "displayName": "Milestone name",
+            "name": "Milestonename",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Milestone group",
+            "name": "Milestonegroup",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Tooltips",
+            "name": "Tooltips",
+            "kind": "Measure"
+        }
+    ],
+    "drilldown": {
+        "roles": [
+            "Category"
+        ]
+    },
+    "objects": {
+        "legend": {
+            "displayName": "Legend",
+            "properties": {
+                "show": {
+                  "displayName": "Legend",
+                  "type": {
+                      "bool": true
+                  }
+                },
+                "fontSize": {
+                    "displayName": "Text size",
+                    "type":{
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "title": {
+                    "displayName": "Title",
+                    "description": "Toggle button for title",
+                    "type":{
+                        "bool": true
+                    }
+                },
+                "titleText": {
+                    "displayName": "Legend name",
+                    "description": "Legend title",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "color": {
+                    "displayName": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "position":{
+                    "displayName": "Position",
+                    "type": {
+                         "enumeration":[
+                             {
+                                 "value": "Top",
+                                 "displayName": "Top"
+                             },
+                             {
+                                "value": "Top center",
+                                 "displayName": "Top center"
+                             },
+                             {
+                                "value": "Bottom",
+                                 "displayName": "Bottom"
+                             },
+                             {
+                                 "value": "Bottom center",
+                                 "displayName": "Bottom center"
+                             },
+                             {
+                                "value": "Left",
+                                 "displayName": "Left"
+                             },
+                             {
+                                "value": "Left center",
+                                 "displayName": "Left center"
+                             },
+                             {
+                                "value": "Right",
+                                 "displayName": "Right"
+                             },
+                             {
+                                "value": "Right center",
+                                 "displayName": "Right center"
+                             }
+                         ]
+                     }
+                }
+            }
+        },
+        "dataColors":{
+            "displayName": "Data colors",
+            "properties": {
+                "fillLineColor": {
+                    "displayName": "Colors",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "fillBarColor": {
+                    "displayName": "Colors",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "xAxis": {
+            "displayName": "X-Axis",
+            "description": "X axis settings",
+            "properties": {
+                "show": {
+                  "displayName": "X-Axis",
+                  "type": {
+                      "bool": true
+                  }
+                },
+                "typeX": {
+                    "displayName": "Type",
+                    "description": "Types for x axis",
+                    "type":{
+                        "enumeration":[
+                            {
+                                "displayName": "Continuous",
+                                "value": "Continuous"
+                            },
+                            {
+                                "displayName": "Categorical",
+                                "value": "Categorical"
+                            }
+                        ]
+                    }
+                },
+                "startValue": {
+                    "displayName": "Start value",
+                    "placeHolderText": "MM-DD-YYYY",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "endValue": {
+                    "displayName": "End value",
+                    "placeHolderText": "MM-DD-YYYY",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Text size",
+                    "type":{
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "color": {
+                    "displayName": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "fontFamily": {
+                    "displayName": "Font family",
+                    "description": "Select the font-family for scale labels",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "Arial",
+                                "displayName": "Arial"
+                            },
+                            {
+                                "value": "Arial Black",
+                                "displayName": "Arial Black"
+                            },
+                            {
+                                "value": "Arial Unicode MS",
+                                "displayName": "Arial Unicode MS"
+                            },
+                            {
+                                "value": "Calibri",
+                                "displayName": "Calibri"
+                            },
+                            {
+                                "value": "Cambria",
+                                "displayName": "Cambria"
+                            },
+                            {
+                                "value": "Cambria Math",
+                                "displayName": "Cambria Math"
+                            },
+                            {
+                                "value": "Candara",
+                                "displayName": "Candara"
+                            },
+                            {
+                                "value": "Comic Sans MS",
+                                "displayName": "Comic Sans MS"
+                            },
+                            {
+                                "value": "Consolas",
+                                "displayName": "Consolas"
+                            },
+                            {
+                                "value": "Constantia",
+                                "displayName": "Constantia"
+                            },
+                            {
+                                "value": "Corbel",
+                                "displayName": "Corbel"
+                            },
+                            {
+                                "value": "Courier New",
+                                "displayName": "Courier New"
+                            },
+                            {
+                                "value": "Georgia",
+                                "displayName": "Georgia"
+                            },
+                            {
+                                "value": "Lucida Sans Unicode",
+                                "displayName": "Lucida Sans Unicode"
+                            },
+                            {
+                                "value": "Segoe (Bold)",
+                                "displayName": "Segoe (Bold)"
+                            },
+                            {
+                                "value": "Segoe UI",
+                                "displayName": "Segoe UI"
+                            },
+                            {
+                                "value": "Segoe UI Light",
+                                "displayName": "Segoe UI Light"
+                            },
+                            {
+                                "value": "Symbol",
+                                "displayName": "Symbol"
+                            },
+                            {
+                                "value": "Tahoma",
+                                "displayName": "Tahoma"
+                            },
+                            {
+                                "value": "Times New Roman",
+                                "displayName": "Times New Roman"
+                            },
+                            {
+                                "value": "Trebuchet MS",
+                                "displayName": "Trebuchet MS"
+                            },
+                            {
+                                "value": "Verdana",
+                                "displayName": "Verdana"
+                            },
+                            {
+                                "value": "Wingdings",
+                                "displayName": "Wingdings"
+                            }
+                        ]
+                    }
+                },
+                "maxAxisHeight": {
+                    "displayName": "X axis padding",
+                    "description": "Padding for x-axis from bottom",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "title": {
+                    "displayName": "Title",
+                    "description": "Toggle for the X-axis",
+                    "type":{
+                        "bool": true
+                    }
+                },
+                "titleText": {
+                    "displayName": "Axis title",
+                    "description": "Axis title",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "titleFontSize": {
+                    "displayName": "Title text size",
+                    "description": "Title text size",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "titleFontColor": {
+                    "displayName": "Title color",
+                    "description": "Title color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "verticalGridLines": {
+                    "displayName": "Gridlines",
+                    "description": "Gridlines",
+                    "type":{
+                        "bool": true
+                    }
+                },
+                "verticalLineColor": {
+                    "displayName": "Color",
+                    "description": "Set reference line color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "verticalLineWidth": {
+                    "displayName": "Stroke width",
+                    "description": "Stroke Width",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "minimumCategoryWidth": {
+                    "displayName": "Minimum category width",
+                    "type" : {
+                        "integer": true
+                    }
+                },
+                "innerPadding": {
+                    "displayName": "Inner padding",
+                    "description": "Inner padding as a percentage of category width",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                }
+            }
+        },
+        "yAxis": {
+            "displayName": "Y-Axis",
+            "description": "Y axis settings",
+            "properties": {
+                "show": {
+                  "displayName": "Y-Axis",
+                  "type": {
+                      "bool": true
+                  }
+                },
+                "position": {
+                    "displayName": "Position",
+                    "description": "Set left or right",
+                    "type": {
+                        "enumeration":[
+                            {
+                                "value": "Left",
+                                "displayName": "Left"
+                            },
+                            {
+                                "value": "Right",
+                                "displayName": "Right"
+                            }
+                        ]
+                    }
+                },
+                "scaleType": {
+                    "displayName": "Scale type",
+                    "description": "Scale type",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Log",
+                                "value": "log"
+                            },
+                            {
+                                "displayName": "Linear",
+                                "value": "linear"
+                            }
+                        ]
+                    }
+                },
+                "startValue": {
+                    "displayName": "Start",
+                    "description" : "Enter a starting value (optional)",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "endValue": {
+                    "displayName": "End",
+                    "description" : "Enter a starting value (optional)",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Text size",
+                    "description" : "Text Size",
+                    "type":{
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "color": {
+                    "displayName": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "fontFamily": {
+                    "displayName": "Font family",
+                    "description": "Font family",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "Arial",
+                                "displayName": "Arial",
+                                "font-family": "Arial"
+                            },
+                            {
+                                "value": "Arial Black",
+                                "displayName": "Arial Black",
+                                "font-family": "Arial Black"
+                            },
+                            {
+                                "value": "Arial Unicode MS",
+                                "displayName": "Arial Unicode MS",
+                                "font-family": "Arial Unicode MS"
+                            },
+                            {
+                                "value": "Calibri",
+                                "displayName": "Calibri"
+                            },
+                            {
+                                "value": "Cambria",
+                                "displayName": "Cambria"
+                            },
+                            {
+                                "value": "Cambria Math",
+                                "displayName": "Cambria Math"
+                            },
+                            {
+                                "value": "Candara",
+                                "displayName": "Candara"
+                            },
+                            {
+                                "value": "Comic Sans MS",
+                                "displayName": "Comic Sans MS",
+                                "font-family": "Comic Sans MS"
+                            },
+                            {
+                                "value": "Consolas",
+                                "displayName": "Consolas"
+                            },
+                            {
+                                "value": "Constantia",
+                                "displayName": "Constantia"
+                            },
+                            {
+                                "value": "Corbel",
+                                "displayName": "Corbel"
+                            },
+                            {
+                                "value": "Courier New",
+                                "displayName": "Courier New"
+                            },
+                            {
+                                "value": "Georgia",
+                                "displayName": "Georgia"
+                            },
+                            {
+                                "value": "Lucida Sans Unicode",
+                                "displayName": "Lucida Sans Unicode"
+                            },
+                            {
+                                "value": "Segoe (Bold)",
+                                "displayName": "Segoe (Bold)"
+                            },
+                            {
+                                "value": "Segoe UI",
+                                "displayName": "Segoe UI"
+                            },
+                            {
+                                "value": "Segoe UI Light",
+                                "displayName": "Segoe UI Light"
+                            },
+                            {
+                                "value": "Symbol",
+                                "displayName": "Symbol"
+                            },
+                            {
+                                "value": "Tahoma",
+                                "displayName": "Tahoma"
+                            },
+                            {
+                                "value": "Times New Roman",
+                                "displayName": "Times New Roman"
+                            },
+                            {
+                                "value": "Trebuchet MS",
+                                "displayName": "Trebuchet MS"
+                            },
+                            {
+                                "value": "Verdana",
+                                "displayName": "Verdana"
+                            },
+                            {
+                                "value": "Wingdings",
+                                "displayName": "Wingdings"
+                            }
+                        ]
+                    }
+                },
+                "title": {
+                    "displayName": "Title",
+                    "description": "Toggle button for y axis title",
+                    "type":{
+                        "bool": true
+                    }
+                },
+                "titleText": {
+                    "displayName": "Axis title",
+                    "description": "Title of y axis",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "titleFontSize": {
+                    "displayName": "Title text size",
+                    "description": "Font size of title of y axis",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "titleFontColor": {
+                    "displayName": "Title color",
+                    "description": "Color of title of y axis",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "horizontalGridLines": {
+                    "displayName": "Gridlines",
+                    "description": "Gridlines",
+                    "type":{
+                        "bool": true
+                    }
+                },
+                "horizontalLineColor": {
+                    "displayName": "Color",
+                    "description": "Set reference line color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "horizontalLineWidth": {
+                    "displayName": "Stroke width",
+                    "description": "Stroke width",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "displayUnit":{
+                    "displayName": "Display units",
+                    "description": "Display the units (thousand, million, etc)",
+                    "type": {
+                        "formatting": {
+                            "labelDisplayUnits": true
+                        }
+                    }
+                },
+                "decimalPoints": {
+                    "displayName": "Value decimal places",
+                    "description": "Select the number of decimal places to display for the value (max 4 decimal points allowed)",
+                    "type":{
+                        "integer": true
+                    }
+                },
+                "secondaryYAxis": {
+                    "displayName": "Show Secondary",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "secondaryScaleType": {
+                    "displayName": "Scale type",
+                    "description": "Scale type",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "displayName": "Log",
+                                "value": "log"
+                            },
+                            {
+                                "displayName": "Linear",
+                                "value": "linear"
+                            }
+                        ]
+                    }
+                },
+                "secondaryStartValue": {
+                    "displayName": "Start",
+                    "description":"Enter a starting value (optional)",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "secondaryEndValue": {
+                    "displayName": "End",
+                    "description":"Enter a ending value (optional)",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "secFontSize": {
+                    "displayName": "Text size",
+                    "description":"Text size",
+                    "type":{
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "secondaryColor": {
+                    "displayName": "Color",
+                    "description": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "secondaryFontFamily": {
+                    "displayName": "Font family",
+                    "description": "Font family",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "Arial",
+                                "displayName": "Arial",
+                                "font-family": "Arial"
+                            },
+                            {
+                                "value": "Arial Black",
+                                "displayName": "Arial Black",
+                                "font-family": "Arial Black"
+                            },
+                            {
+                                "value": "Arial Unicode MS",
+                                "displayName": "Arial Unicode MS",
+                                "font-family": "Arial Unicode MS"
+                            },
+                            {
+                                "value": "Calibri",
+                                "displayName": "Calibri"
+                            },
+                            {
+                                "value": "Cambria",
+                                "displayName": "Cambria"
+                            },
+                            {
+                                "value": "Cambria Math",
+                                "displayName": "Cambria Math"
+                            },
+                            {
+                                "value": "Candara",
+                                "displayName": "Candara"
+                            },
+                            {
+                                "value": "Comic Sans MS",
+                                "displayName": "Comic Sans MS",
+                                "font-family": "Comic Sans MS"
+                            },
+                            {
+                                "value": "Consolas",
+                                "displayName": "Consolas"
+                            },
+                            {
+                                "value": "Constantia",
+                                "displayName": "Constantia"
+                            },
+                            {
+                                "value": "Corbel",
+                                "displayName": "Corbel"
+                            },
+                            {
+                                "value": "Courier New",
+                                "displayName": "Courier New"
+                            },
+                            {
+                                "value": "Georgia",
+                                "displayName": "Georgia"
+                            },
+                            {
+                                "value": "Lucida Sans Unicode",
+                                "displayName": "Lucida Sans Unicode"
+                            },
+                            {
+                                "value": "Segoe (Bold)",
+                                "displayName": "Segoe (Bold)"
+                            },
+                            {
+                                "value": "Segoe UI",
+                                "displayName": "Segoe UI"
+                            },
+                            {
+                                "value": "Segoe UI Light",
+                                "displayName": "Segoe UI Light"
+                            },
+                            {
+                                "value": "Symbol",
+                                "displayName": "Symbol"
+                            },
+                            {
+                                "value": "Tahoma",
+                                "displayName": "Tahoma"
+                            },
+                            {
+                                "value": "Times New Roman",
+                                "displayName": "Times New Roman"
+                            },
+                            {
+                                "value": "Trebuchet MS",
+                                "displayName": "Trebuchet MS"
+                            },
+                            {
+                                "value": "Verdana",
+                                "displayName": "Verdana"
+                            },
+                            {
+                                "value": "Wingdings",
+                                "displayName": "Wingdings"
+                            }
+                        ]
+                    }
+                },
+                "secondaryTitle": {
+                    "displayName": "Title",
+                    "description": "Title for the Y-axis",
+                    "type":{
+                        "bool": true
+                    }
+                },
+                "secondaryTitleText": {
+                    "displayName": "Axis title",
+                    "description": "Title for the Y-axis",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "secTitleFontSize": {
+                    "displayName": "Title text size",
+                    "description": "Font size of title of y axis",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "secondaryTitleFontColor": {
+                    "displayName": "Title color",
+                    "description": "Title color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "secondaryDisplayUnit":{
+                    "displayName": "Display units",
+                    "description": "Display the units (thousand, million, etc)",
+                    "type": {
+                        "formatting": {
+                            "labelDisplayUnits": true
+                        }
+                    }
+                },
+                "secondaryDecimalPoint": {
+                    "displayName": "Value decimal places",
+                    "description": "Select the number of decimal places to display for the value (max 4 decimal points allowed)",
+                    "type":{
+                        "integer": true
+                    }
+                }
+            }
+        },
+        "dataLabels": {
+            "displayName": "Data labels",
+            "properties": {
+                "show": {
+                    "displayName": "Data labels",
+                    "description" : "Display data label options",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Text size",
+                    "description": "Text size",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "fontFamily": {
+                    "displayName": "Font family",
+                    "description": "Font family",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "Arial",
+                                "displayName": "Arial",
+                                "font-family": "Arial"
+                            },
+                            {
+                                "value": "Arial Black",
+                                "displayName": "Arial Black",
+                                "font-family": "Arial Black"
+                            },
+                            {
+                                "value": "Arial Unicode MS",
+                                "displayName": "Arial Unicode MS",
+                                "font-family": "Arial Unicode MS"
+                            },
+                            {
+                                "value": "Calibri",
+                                "displayName": "Calibri"
+                            },
+                            {
+                                "value": "Cambria",
+                                "displayName": "Cambria"
+                            },
+                            {
+                                "value": "Cambria Math",
+                                "displayName": "Cambria Math"
+                            },
+                            {
+                                "value": "Candara",
+                                "displayName": "Candara"
+                            },
+                            {
+                                "value": "Comic Sans MS",
+                                "displayName": "Comic Sans MS",
+                                "font-family": "Comic Sans MS"
+                            },
+                            {
+                                "value": "Consolas",
+                                "displayName": "Consolas"
+                            },
+                            {
+                                "value": "Constantia",
+                                "displayName": "Constantia"
+                            },
+                            {
+                                "value": "Corbel",
+                                "displayName": "Corbel"
+                            },
+                            {
+                                "value": "Courier New",
+                                "displayName": "Courier New"
+                            },
+                            {
+                                "value": "Georgia",
+                                "displayName": "Georgia"
+                            },
+                            {
+                                "value": "Lucida Sans Unicode",
+                                "displayName": "Lucida Sans Unicode"
+                            },
+                            {
+                                "value": "Segoe (Bold)",
+                                "displayName": "Segoe (Bold)"
+                            },
+                            {
+                                "value": "Segoe UI",
+                                "displayName": "Segoe UI"
+                            },
+                            {
+                                "value": "Segoe UI Light",
+                                "displayName": "Segoe UI Light"
+                            },
+                            {
+                                "value": "Symbol",
+                                "displayName": "Symbol"
+                            },
+                            {
+                                "value": "Tahoma",
+                                "displayName": "Tahoma"
+                            },
+                            {
+                                "value": "Times New Roman",
+                                "displayName": "Times New Roman"
+                            },
+                            {
+                                "value": "Trebuchet MS",
+                                "displayName": "Trebuchet MS"
+                            },
+                            {
+                                "value": "Verdana",
+                                "displayName": "Verdana"
+                            },
+                            {
+                                "value": "Wingdings",
+                                "displayName": "Wingdings"
+                            }
+                        ]
+                    }
+                },
+                "color": {
+                    "displayName": "Color",
+                    "description": "Set Color of data labels",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "displayUnit": {
+                    "displayName": "Display units",
+                    "description": "Select the unit (thousand, million, Billion, etc)",
+                    "type": {
+                        "formatting": {
+                            "labelDisplayUnits": true
+                        }
+                    }
+                },
+                "decimalPoints": {
+                    "displayName": "Value decimal places",
+                    "description": "Select the number of decimal places to display for the value (max 4 decimal points allowed)",
+                    "type": {
+                        "integer": true
+                    }
+                }
+            }
+        },
+        "mileStone":{
+            "displayName": "Milestone lines",
+            "properties": {
+                "show": {
+                    "displayName": "Milestone lines",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "opacity": {
+                    "displayName": "Opacity",
+                    "description": "Set Opacity for milestone lines",
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "lineWidth": {
+                    "displayName": "Line width",
+                    "description": "Select Milestone line width between (0 to 5)",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "lineStyle": {
+                    "displayName": "Line style",
+                    "description": "Set milestone line style",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "solid",
+                                "displayName": "Solid"
+                            },
+                            {
+                                "value": "dashed",
+                                "displayName": "Dashed"
+                            },
+                            {
+                                "value": "dotted",
+                                "displayName": "Dotted"
+                            }
+                        ]
+                    }
+                },
+                "colorSettings": {
+                    "displayName": "Color selection",
+                    "description": "Set color based on given options",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "milestone",
+                                "displayName": "Milestone name"
+                            },
+                            {
+                                "value": "milestoneGroup",
+                                "displayName": "Milestone group"
+                            }
+                        ]
+                    }
+                },
+                "fillColor": {
+                    "displayName": "Unassigned color",
+                    "description": "Unassigned milestone color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "fontFamily": {
+                    "displayName": "Font family",
+                    "description": "Font family",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "Arial",
+                                "displayName": "Arial"
+                            },
+                            {
+                                "value": "Arial Black",
+                                "displayName": "Arial Black"
+                            },
+                            {
+                                "value": "Arial Unicode MS",
+                                "displayName": "Arial Unicode MS"
+                            },
+                            {
+                                "value": "Calibri",
+                                "displayName": "Calibri"
+                            },
+                            {
+                                "value": "Cambria",
+                                "displayName": "Cambria"
+                            },
+                            {
+                                "value": "Cambria Math",
+                                "displayName": "Cambria Math"
+                            },
+                            {
+                                "value": "Candara",
+                                "displayName": "Candara"
+                            },
+                            {
+                                "value": "Comic Sans MS",
+                                "displayName": "Comic Sans MS"
+                            },
+                            {
+                                "value": "Consolas",
+                                "displayName": "Consolas"
+                            },
+                            {
+                                "value": "Constantia",
+                                "displayName": "Constantia"
+                            },
+                            {
+                                "value": "Corbel",
+                                "displayName": "Corbel"
+                            },
+                            {
+                                "value": "Courier New",
+                                "displayName": "Courier New"
+                            },
+                            {
+                                "value": "Georgia",
+                                "displayName": "Georgia"
+                            },
+                            {
+                                "value": "Lucida Sans Unicode",
+                                "displayName": "Lucida Sans Unicode"
+                            },
+                            {
+                                "value": "Segoe (Bold)",
+                                "displayName": "Segoe (Bold)"
+                            },
+                            {
+                                "value": "Segoe UI",
+                                "displayName": "Segoe UI"
+                            },
+                            {
+                                "value": "Segoe UI Light",
+                                "displayName": "Segoe UI Light"
+                            },
+                            {
+                                "value": "Symbol",
+                                "displayName": "Symbol"
+                            },
+                            {
+                                "value": "Tahoma",
+                                "displayName": "Tahoma"
+                            },
+                            {
+                                "value": "Times New Roman",
+                                "displayName": "Times New Roman"
+                            },
+                            {
+                                "value": "Trebuchet MS",
+                                "displayName": "Trebuchet MS"
+                            },
+                            {
+                                "value": "Verdana",
+                                "displayName": "Verdana"
+                            },
+                            {
+                                "value": "Wingdings",
+                                "displayName": "Wingdings"
+                            }
+                        ]
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Text size",
+                    "type":{
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "verticalToggle": {
+                    "displayName": "Label orientation",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "horizontal",
+                                "displayName": "Horizontal"
+                            },
+                            {
+                                "value": "vertical",
+                                "displayName": "Vertical"
+                            }
+                        ]
+                    }
+                },
+                "height": {
+                    "displayName": "Label width",
+                    "description": "Width for milestone lables",
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        },
+        "todayLine": {
+            "displayName": "Today line",
+            "properties": {
+                "show": {
+                    "displayName": "Today Line",
+                    "description": "Toggle button to display today line",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "lineWidth": {
+                    "displayName": "Line width",
+                    "description": "Today line width between (>0 to 5)",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "lineStyle": {
+                    "displayName": "Line style",
+                    "description": "Today line style",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "solid",
+                                "displayName": "Solid"
+                            },
+                            {
+                                "value": "dashed",
+                                "displayName": "Dashed"
+                            },
+                            {
+                                "value": "dotted",
+                                "displayName": "Dotted"
+                            }
+                        ]
+                    }
+                },
+                "fillColor": {
+                    "displayName": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Text size",
+                    "description": "Font size for today label",
+                    "type": {
+                        "formatting":{
+                            "fontSize": true
+                        }
+                    }
+                },
+                "labelPosition": {
+                    "displayName": "Label position",
+                    "description": "Today label position(above the bar or below x axis label)",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "top",
+                                "displayName": "Top"
+                            },
+                            {
+                                "value": "below",
+                                "displayName": "Bottom"
+                            }
+                        ]
+                    }
+                },
+                "colorBeforeTodayToggle": {
+                    "displayName": "Color for the prior milestones",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "colorBeforeToday": {
+                    "displayName": "Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "shapes": {
+            "displayName": "Shapes",
+            "description": "Shape rendering option for lines",
+            "properties": {
+                "lineWidth": {
+                    "displayName": "Stroke width",
+                    "description": "Stroke width for lines between (>0 - 5)",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "lineStyle":{
+                    "displayName": "Line style",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "solid",
+                                "displayName": "Solid"
+                            },
+                            {
+                                "value": "dashed",
+                                "displayName": "Dashed"
+                            },
+                            {
+                                "value": "dotted",
+                                "displayName": "Dotted"
+                            }
+                        ]
+                    }
+                },
+                "joinType": {
+                    "displayName": "Join type",
+                    "description": "Join type",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "round",
+                                "displayName": "Round"
+                            },
+                            {
+                                "value": "miter",
+                                "displayName": "Miter"
+                            },
+                            {
+                                "value": "bevel",
+                                "displayName": "Bevel"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "sorting": {
+        "default": {}
+    },
+    "dataViewMappings": [
+        {
+            "conditions": [
+                {
+                    "Category": {
+                        "min": 0,
+                        "max": 1
+                    },
+                    "Legend": {
+                        "min": 0,
+                        "max": 1
+                    },
+                    "Line": {
+                        "min": 0,
+                        "max": 1
+                    },
+                    "Bar": {
+                        "min": 0,
+                        "max": 1
+                    },
+                    "Milestonename": {
+                        "max": 1
+                    },
+                    "Milestonegroup": {
+                        "max": 1
+                    },
+                    "Tooltips": {
+                        "min": 0
+                    }
+                },
+                {
+                    "Category": {
+                        "min": 0,
+                        "max": 1
+                    },
+                    "Legend": {
+                        "min": 0,
+                        "max": 0
+                    },
+                    "Line": {
+                        "min": 0
+                    },
+                    "Bar": {
+                        "min": 0
+                    },
+                    "Milestonename": {
+                        "max": 1
+                    },
+                    "Milestonegroup": {
+                        "max": 1
+                    },
+                    "Tooltips": {
+                        "min": 0
+                    }
+                }
+            ],
+            "categorical": {
+                "categories": {
+                    "select": [
+                        {
+                            "for": {
+                                "in": "Category"
+                            }
+                        },
+                        {
+                            "for": {
+                                "in": "Legend"
+                            }
+                        }
+                    ],                    
+                    "dataReductionAlgorithm": {
+                        "top": {
+                            "count": 30000
+                        }
+                    }
+                },
+                "values": {
+                    "select": [
+                        {
+                            "bind": {
+                                "to": "Line"
+                            }
+                        },
+                        {
+                            "bind": {
+                                "to": "Bar"
+                            }
+                        },
+                        {
+                            "bind": {
+                                "to": "Milestonename"
+                            }
+                        },
+                        {
+                            "bind": {
+                                "to": "Milestonegroup"
+                            }
+                        },
+                        {
+                            "bind": {
+                                "to": "Tooltips"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
